@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="ExtendedChannelLink">https://t.me/tgx_extended</string>
+	<string name="GithubLink">https://github.com/whitesiemens/tgx_extended</string>
+	<string name="CrowdinLink"></string>
+	<string name="DonateLink"></string>
+
+	<string name="ExtendedSettings">TGX Extended</string>
+
+	<string name="GeneralSettings">General</string>
+	<string name="AppearanceSettings">Appearance</string>
+	<string name="ChatsSettings">Chats</string>
+	<string name="MiscSettings">Misc</string>
+
+	<string name="AboutExtended">About</string>
+	<string name="TelegramChannel">Official channel</string>
+	<string name="GitHub">View source code</string>
+	<string name="Crowdin">Translate</string>
+	<string name="CrowdinDesc">Help to translate TGX Extended to your language.</string>
+	<string name="Donate">Donate</string>
+	<string name="DonateDesc">Support modification development.</string>
+	<string name="OTACheck">Check for update</string>
+
+</resources>

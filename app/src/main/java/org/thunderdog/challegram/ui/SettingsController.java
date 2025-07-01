@@ -100,6 +100,8 @@ import me.vkryl.core.reference.ReferenceList;
 import tgx.td.ChatId;
 import tgx.td.Td;
 
+import com.tgx.extended.ui.ExtendedSettingsController;
+
 public class SettingsController extends ViewController<Void> implements
   View.OnClickListener, ComplexHeaderView.Callback,
   Menu, MoreDelegate, OptionDelegate,
@@ -612,6 +614,10 @@ public class SettingsController extends ViewController<Void> implements
     }
 
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+    items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_extendedSettings, R.drawable.baseline_settings_suggest_24, R.string.ExtendedSettings));
+    items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+
+    items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
     items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_devices, R.drawable.baseline_devices_other_24, R.string.Devices));
     items.add(new ListItem(ListItem.TYPE_SEPARATOR));
 
@@ -1119,6 +1125,8 @@ public class SettingsController extends ViewController<Void> implements
       EditBioController c = new EditBioController(context, tdlib);
       c.setArguments(new EditBioController.Arguments(about != null ? about.text : "", 0));
       navigateTo(c);
+    } else if (viewId == R.id.btn_extendedSettings) {
+      navigateTo(new ExtendedSettingsController(context, tdlib));
     } else if (viewId == R.id.btn_birthdate) {
       tdlib.ui().openBirthdateEditor(this, v, TdlibUi.BirthdateOpenOrigin.PROFILE);
     } else if (viewId == R.id.btn_peer_id) {
