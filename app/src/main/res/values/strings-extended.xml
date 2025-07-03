@@ -33,4 +33,11 @@
 	<string name="HidePhoneNumberDesc">This setting will also hide the phone number in the profile.</string>
 	<string name="PhoneNumberHidden">Phone number hidden</string>
 
+	<string name="MessagePanelPreferences">Message panel</string>
+	<string name="HideMessageButtons">Hide message panel buttons</string>
+	<string name="DisableCameraButton">Camera</string>
+	<string name="DisableRecordButton">Voice message</string>
+	<string name="DisableCommandButton">Command (bots)</string>
+	<string name="DisableSenderButton">Send as</string>
+
 </resources>

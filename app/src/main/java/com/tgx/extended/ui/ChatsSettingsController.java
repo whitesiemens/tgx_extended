@@ -37,7 +37,35 @@ public class ChatsSettingsController extends RecyclerViewController<Void> implem
   private SettingsAdapter adapter;
 
   @Override public void onClick(View v) {
-  	// TODO: Later
+  	int viewId = v.getId();
+    if (viewId == R.id.btn_hideMessageButtons) {
+      showMessagePanelOptions();
+    }
+  }
+
+  private void showMessagePanelOptions () {
+    showSettings(new SettingsWrapBuilder(R.id.btn_hideMessageButtons).addHeaderItem(
+      new ListItem(ListItem.TYPE_INFO, R.id.text_title, 0, R.string.MessagePanelPreferences, false)).setRawItems(
+      new ListItem[] {
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableCameraButton, 0, R.string.DisableCameraButton, ExtendedConfig.disableCameraButton),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableCommandButton, 0, R.string.DisableCommandButton, ExtendedConfig.disableCommandButton),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableRecordButton, 0, R.string.DisableRecordButton, ExtendedConfig.disableRecordButton),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableSenderButton, 0, R.string.DisableSenderButton, ExtendedConfig.disableSenderButton)
+      }).setIntDelegate((id, result) -> {
+      if (ExtendedConfig.disableCameraButton == (result.get(R.id.btn_disableCameraButton) == 0)) {
+        ExtendedConfig.instance().toggleDisableCameraButton();
+      }
+      if (ExtendedConfig.disableCommandButton == (result.get(R.id.btn_disableCommandButton) == 0)) {
+        ExtendedConfig.instance().toggleDisableCommandButton();
+      }
+      if (ExtendedConfig.disableRecordButton == (result.get(R.id.btn_disableRecordButton) == 0)) {
+        ExtendedConfig.instance().toggleDisableRecordButton();
+      }
+      if (ExtendedConfig.disableSenerButton == (result.get(R.id.btn_disableSendAsButton) == 0)) {
+        ExtendedConfig.instance().toggleDisableSenderButton();
+      }
+      adapter.updateValuedSettingById(R.id.btn_hideMessageButtons);
+    }));
   }
 
   @Override protected void onCreateView(Context context, CustomRecyclerView recyclerView) {
@@ -45,16 +73,45 @@ public class ChatsSettingsController extends RecyclerViewController<Void> implem
   			@Override protected void setValuedSetting(ListItem item, SettingView view, boolean isUpdate) {
   				view.setDrawModifier(item.getDrawModifier());
   				int itemId = item.getId();
-  				// TODO: Later
+  				if (itemId == R.id.btn_disableCameraButton) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.disableCameraButton, isUpdate);
+          } else if (itemId == R.id.btn_disableRecordButton) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.disableRecordButton, isUpdate);
+          } else if (itemId == R.id.btn_disableCommandButton) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.disableCommandButton, isUpdate);
+          } else if (itemId == R.id.btn_disableSenderButton) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.disableSenderButton, isUpdate);
+          } else if (itemId == R.id.btn_hideMessageButtons) {
+            StringBuilder b = new StringBuilder();
+            String separator = Lang.getConcatSeparator();
+            if (ExtendedConfig.disableCameraButton) {
+              b.append(Lang.getString(R.string.DisableCameraButton));
+              if (b.length() > 0) b.append(separator);
+            } else if (ExtendedConfig.disableRecordButton) {
+              b.append(Lang.getString(R.string.DisableRecordButton));
+              if (b.length() > 0) b.append(separator);
+            } else if (ExtendedConfig.disableCommandButton) {
+              b.append(Lang.getString(R.string.DisableCommandButton));
+              if (b.length() > 0) b.append(separator);
+            } else if (ExtendedConfig.disableSenderButton) {
+              b.append(Lang.getString(R.string.DisableSenderButton));
+            }
+          }
         }
       };
 
       ArrayList<ListItem> items = new ArrayList<>();
 
-      // TODO: Later
+      items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
+
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.MessagePanelPreferences));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_hideMessageButtons, 0, R.string.HideMessageButtons));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
       adapter.setItems(items, true);
       recyclerView.setAdapter(adapter);
 
   }
+
 }

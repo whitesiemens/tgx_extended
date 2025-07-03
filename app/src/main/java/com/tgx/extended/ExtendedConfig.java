@@ -27,6 +27,10 @@ public class ExtendedConfig {
 
   public static final String KEY_SHOW_USER_ID = "show_user_id";
   public static final String KEY_HIDE_PHONE_NUMBER = "hide_phone_number";
+  public static final String KEY_DISABLE_CAM_BTN = "disable_camera_button";
+  public static final String KEY_DISABLE_RCD_BTN = "disable_record_button";
+  public static final String KEY_DISABLE_CMD_BTN = "disable_command_button";
+  public static final String KEY_DISABLE_SNDR_BTN = "disable_sender_button";
 
   public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
   public static boolean hidePhoneNumber = instance().getBoolean(KEY_HIDE_PHONE_NUMBER, false);
@@ -173,5 +177,25 @@ public class ExtendedConfig {
   public void toggleHidePhoneNumber () {
     putBoolean(KEY_HIDE_PHONE_NUMBER, hidePhoneNumber ^= true);
     notifyClientListeners(KEY_HIDE_PHONE_NUMBER, !hidePhoneNumber, hidePhoneNumber);
+  }
+
+  public void toggleDisableCameraButton () {
+    putBoolean(KEY_DISABLE_CAM_BTN, disableCameraButton ^= true);
+    notifyClientListeners(KEY_DISABLE_CAM_BTN, !disableCameraButton, disableCameraButton);
+  }
+
+  public void toggleDisableRecordButton () {
+    putBoolean(KEY_DISABLE_RCD_BTN, disableRecordButton ^= true);
+    notifyClientListeners(KEY_DISABLE_RCD_BTN, !disableRecordButton, disableRecordButton);
+  }
+
+  public void toggleDisableCommandButton () {
+    putBoolean(KEY_DISABLE_CMD_BTN, disableCommandButton ^= true);
+    notifyClientListeners(KEY_DISABLE_CMD_BTN, !disableCommandButton, disableCommandButton);
+  }
+
+  public void toggleDisableSenderButton () {
+    putBoolean(KEY_DISABLE_SNDR_BTN, disableSenderButton ^= true);
+    notifyClientListeners(KEY_DISABLE_SNDR_BTN, !disableSenderButton, disableSenderButton);
   }
 }

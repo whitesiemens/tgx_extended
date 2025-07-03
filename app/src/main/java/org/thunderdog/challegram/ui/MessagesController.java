@@ -291,6 +291,8 @@ import tgx.td.TdConstants;
 import tgx.td.data.MessageWithProperties;
 import tgx.td.ui.TdUi;
 
+import com.tgx.extended.ExtendedConfig;
+
 public class MessagesController extends ViewController<MessagesController.Arguments> implements
   Menu, Unlockable, View.OnClickListener,
   ActivityResultHandler, MoreDelegate, CommandKeyboardLayout.Callback, MediaCollectorDelegate, SelectDelegate,
@@ -309,7 +311,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
   RecordAudioVideoController.RecordStateListeners,
   ViewPager.OnPageChangeListener, ViewPagerTopView.OnItemClickListener,
   TGMessage.SelectableDelegate, GlobalAccountListener, EmojiToneHelper.Delegate, ComplexHeaderView.Callback, LiveLocationHelper.Callback, CreatePollController.Callback,
-  HapticMenuHelper.Provider, HapticMenuHelper.OnItemClickListener, TdlibSettingsManager.DismissRequestsListener, InputView.SelectionChangeListener {
+  HapticMenuHelper.Provider, HapticMenuHelper.OnItemClickListener, TdlibSettingsManager.DismissRequestsListener, InputView.SelectionChangeListener, ExtendedConfig.SettingsChangeListener {
 
   private boolean reuseEnabled;
   private boolean destroyInstance;
@@ -577,6 +579,19 @@ public class MessagesController extends ViewController<MessagesController.Argume
       headerCell.setForcedSubtitle(Lang.lowercase(Lang.getString(isSelfChat() ? R.string.Reminders : R.string.ScheduledMessages)));
     } else {
       headerCell.setForcedSubtitle(null);
+    }
+  }
+
+  @Override
+  public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
+    switch (key) {
+      case ExtendedConfig.KEY_DISABLE_CAM_BTN:
+      case ExtendedConfig.KEY_DISABLE_RCD_BTN:
+      case ExtendedConfig.KEY_DISABLE_CMD_BTN:
+      case ExtendedConfig.KEY_DISABLE_SNDR_BTN: {
+        updateView();
+        break;
+      }
     }
   }
 
@@ -1161,18 +1176,22 @@ public class MessagesController extends ViewController<MessagesController.Argume
     addThemeInvalidateListener(recordButton);
     recordButton.setLayoutParams(lp);
 
-    attachButtons.addView(commandButton);
+    if (!ExtendedConfig.disableCommandButton) {
+      attachButtons.addView(commandButton);
+    }
     if (silentButton != null) {
       attachButtons.addView(silentButton);
     }
     if (scheduleButton != null) {
       attachButtons.addView(scheduleButton);
     }
-    if (cameraButton != null) {
+    if (!ExtendedConfig.disableCameraButton && cameraButton != null) {
       attachButtons.addView(cameraButton);
     }
     attachButtons.addView(mediaButton);
-    attachButtons.addView(recordButton);
+    if (!ExtendedConfig.disableRecordButton) {
+      attachButtons.addView(recordButton);
+    }
     attachButtons.updatePivot();
 
     params = new RelativeLayout.LayoutParams(Screen.dp(55f), Screen.dp(49f));
@@ -1403,7 +1422,9 @@ public class MessagesController extends ViewController<MessagesController.Argume
       contentView.addView(emojiButton);
       contentView.addView(attachButtons);
       contentView.addView(sendButton);
-      contentView.addView(messageSenderButton);
+      if (!ExtendedConfig.disableSenderButton) {
+        contentView.addView(messageSenderButton);
+      }
 
       initSearchControls();
       contentView.addView(searchControlsLayout);
@@ -1420,6 +1441,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
     updateView();
 
     TGLegacyManager.instance().addEmojiListener(this);
+    ExtendedConfig.instance().addSettingsListener(this);
 
     if (needTabs()) {
       pagerHeaderView = new ViewPagerHeaderViewCompact(context);
@@ -4264,6 +4286,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
       }
       tdlib.settings().removeJoinRequestsDismissListener(this);
       TGLegacyManager.instance().removeEmojiListener(this);
+      ExtendedConfig.instance().removeSettingsListener(this);
       if (emojiLayout != null) {
         emojiLayout.destroy();
       }
