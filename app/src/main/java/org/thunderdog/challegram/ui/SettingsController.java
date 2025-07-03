@@ -100,6 +100,7 @@ import me.vkryl.core.reference.ReferenceList;
 import tgx.td.ChatId;
 import tgx.td.Td;
 
+import com.tgx.extended.Config;
 import com.tgx.extended.ui.ExtendedSettingsController;
 
 public class SettingsController extends ViewController<Void> implements
@@ -492,6 +493,13 @@ public class SettingsController extends ViewController<Void> implements
           view.setData(Lang.getString(R.string.ViewSourceCodeChangesSince, Lang.codeCreator(), previousVersionName, previousBuildInfo.getCommit()));
         } else if (itemId == R.id.btn_copyDebug) {
           view.setData(R.string.CopyReportDataInfo);
+        } else if (itemId == R.id.btn_userId) {
+          final TdApi.User user = tdlib.myUser();
+          if (user != null) {
+            view.setData("" + user.id);
+          } else {
+            view.setData(R.string.unknownUser);
+          }
         } else if (itemId == R.id.btn_devices) {
           if (sessions == null) {
             view.setData(R.string.LoadingInformation);
@@ -597,6 +605,10 @@ public class SettingsController extends ViewController<Void> implements
     }
     items.add(new ListItem(ListItem.TYPE_SEPARATOR));
     items.add(new ListItem(ListItem.TYPE_INFO_MULTILINE, R.id.btn_bio, R.drawable.baseline_info_24, R.string.UserBio).setContentStrings(R.string.LoadingInformation, R.string.BioNone));
+    if (Config.showUserId) {
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_INFO_SETTING, R.id.btn_userId, R.drawable.baseline_code_24, R.string.ChatId));
+    }
     items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
     TdApi.SuggestedAction[] actions = tdlib.getSuggestedActions();
@@ -1125,6 +1137,22 @@ public class SettingsController extends ViewController<Void> implements
       EditBioController c = new EditBioController(context, tdlib);
       c.setArguments(new EditBioController.Arguments(about != null ? about.text : "", 0));
       navigateTo(c);
+    } else if (viewId == R.id.btn_userId) {
+      final TdApi.User user = tdlib.myUser();
+      IntList ids = new IntList(1);
+      StringList strings = new StringList(1);
+      IntList icons = new IntList(1);
+
+      ids.append(R.id.btn_copyText);
+      strings.append(R.string.Copy);
+      icons.append(R.drawable.baseline_content_copy_24);
+
+      if (user != null) {
+        showOptions("ID" + user.id, ids.get(), strings.get(), null, icons.get(), (itemView, id) -> {
+          UI.copyText(String.valueOf(user.id), R.string.CopiedText);
+          return true;
+        });
+      }
     } else if (viewId == R.id.btn_extendedSettings) {
       navigateTo(new ExtendedSettingsController(context, tdlib));
     } else if (viewId == R.id.btn_birthdate) {

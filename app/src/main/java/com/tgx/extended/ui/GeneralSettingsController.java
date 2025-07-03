@@ -37,7 +37,11 @@ public class GeneralSettingsController extends RecyclerViewController<Void> impl
   private SettingsAdapter adapter;
 
   @Override public void onClick(View v) {
-  	// TODO: Later
+  	int viewId = v.getId();
+    if (viewId == R.id.btn_showUserId) {
+      Config.instance().toggleShowUserId();
+      adapter.updateValuedSettingById(viewId);
+    }
   }
 
   @Override protected void onCreateView(Context context, CustomRecyclerView recyclerView) {
@@ -45,13 +49,20 @@ public class GeneralSettingsController extends RecyclerViewController<Void> impl
   			@Override protected void setValuedSetting(ListItem item, SettingView view, boolean isUpdate) {
   				view.setDrawModifier(item.getDrawModifier());
   				int itemId = item.getId();
-  				// TODO: Later
+  				if (itemId == R.id.btn_showUserId) {
+            view.getToggler().setRadioEnabled(Config.showUserId, isUpdate);
+          }
         }
       };
 
       ArrayList<ListItem> items = new ArrayList<>();
 
-      // TODO: Later
+      items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
+
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.ProfilePreferences));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_showUserId, 0, R.string.ShowUserId));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
       adapter.setItems(items, true);
       recyclerView.setAdapter(adapter);

@@ -151,6 +151,8 @@ import tgx.td.ChatId;
 import tgx.td.Td;
 import tgx.td.TdConstants;
 
+import com.tgx.extended.Config;
+
 public class ProfileController extends ViewController<ProfileController.Args> implements
   Menu,
   MoreDelegate,
@@ -1752,6 +1754,16 @@ public class ProfileController extends ViewController<ProfileController.Args> im
         final int itemId = item.getId();
         if (itemId == R.id.btn_useExplicitDice) {
           view.getToggler().setRadioEnabled(Settings.instance().getNewSetting(item.getLongId()), isUpdate);
+        } else if (itemId == R.id.btn_userId) {
+          switch (mode) {
+            case Mode.USER:
+            case Mode.SECRET:
+            case Mode.CHANNEL:
+            case Mode.SUPERGROUP: {
+              view.setData(String.valueOf(chat.id));
+              break;
+            }
+          }
         } else if (itemId == R.id.btn_username) {
           view.setName(getUsernameName());
           view.setData(getUsernameData());
@@ -2409,6 +2421,18 @@ public class ProfileController extends ViewController<ProfileController.Args> im
     }
   }
 
+  private ListItem newUserIdItem () {
+    switch (mode) {
+      case Mode.USER:
+      case Mode.SECRET:
+      case Mode.CHANNEL:
+      case Mode.SUPERGROUP: {
+        return new ListItem(ListItem.TYPE_INFO_SETTING, R.id.btn_userId, R.drawable.baseline_code_24, R.string.ChatId, false);
+      }
+    }
+    return null;
+  }
+
   private ListItem newPhoneItem () {
     return new ListItem(ListItem.TYPE_INFO_SETTING, R.id.btn_phone, R.drawable.baseline_phone_24, R.string.PhoneMobile);
   }
@@ -2449,6 +2473,15 @@ public class ProfileController extends ViewController<ProfileController.Args> im
         items.add(usernameItem);
         addedCount++;
       }
+    }
+
+    final ListItem userIdItem = newUserIdItem();
+    if (Config.showUserId && userIdItem != null) {
+      if (addedCount > 0) {
+        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      }
+      items.add(userIdItem);
+      addedCount++;
     }
 
     if (userFull != null) {
@@ -3054,6 +3087,15 @@ public class ProfileController extends ViewController<ProfileController.Args> im
       }
     }
 
+    final ListItem userIdItem = newUserIdItem();
+    if (Config.showUserId && userIdItem != null) {
+      if (addedCount > 0) {
+        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      }
+      items.add(userIdItem);
+      addedCount++;
+    }
+
     if (tdlib.canCreateInviteLink(chat) && !isPublic) {
       if (addedCount > 0) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
@@ -3125,6 +3167,15 @@ public class ProfileController extends ViewController<ProfileController.Args> im
 
     if (Settings.instance().showPeerIds()) {
       items.add(newPeerIdItem());
+      addedCount++;
+    }
+
+    final ListItem userIdItem = newUserIdItem();
+    if (Config.showUserId && userIdItem != null) {
+      if (addedCount > 0) {
+        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      }
+      items.add(userIdItem);
       addedCount++;
     }
 
@@ -4765,6 +4816,19 @@ public class ProfileController extends ViewController<ProfileController.Args> im
       tdlib.ui().handleProfileClick(this, v, v.getId(), user, false);
     } else if (viewId == R.id.btn_useExplicitDice) {
       Settings.instance().setNewSetting(((ListItem) v.getTag()).getLongId(), baseAdapter.toggleView(v));
+    } else if (viewId == R.id.btn_userId) {
+      IntList ids = new IntList(1);
+      StringList strings = new StringList(1);
+      IntList icons = new IntList(1);
+
+      ids.append(R.id.btn_copyText);
+      strings.append(R.string.Copy);
+      icons.append(R.drawable.baseline_content_copy_24);
+
+      showOptions("ID" + chat.id, ids.get(), strings.get(), null, icons.get(), (itemView, id) -> {
+        UI.copyText(String.valueOf(chat.id), R.string.CopiedText);
+        return true;
+      });
     } else if (viewId == R.id.btn_peer_id) {
       showOptions(Long.toString(getPeerId()), new int[]{R.id.btn_peer_id_copy}, new String[]{Lang.getString(R.string.Copy)}, null, new int[]{R.drawable.baseline_content_copy_24});
     } else if (viewId == R.id.btn_username) {

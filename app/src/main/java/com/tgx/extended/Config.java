@@ -25,6 +25,10 @@ public class Config {
   private final LevelDB config;
   private static final String KEY_VERSION = "version";
 
+  public static final String KEY_SHOW_USER_ID = "show_user_id";
+
+  public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
+
   private Config () {
     File configDir = new File(UI.getAppContext().getFilesDir(), "extended_config");
     if (!configDir.exists() && !configDir.mkdir()) {
@@ -158,5 +162,9 @@ public class Config {
         listener.onSettingsChanged(key, newSettings, oldSettings);
       }
     }
+  }
+
+  public void toggleShowUserId () {
+    putBoolean(KEY_SHOW_USER_ID, showUserId ^= true);
   }
 }

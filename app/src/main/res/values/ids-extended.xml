@@ -16,4 +16,7 @@
     <item type="id" name="btn_crowdinLink"/>
     <item type="id" name="btn_donateLink"/>
     <item type="id" name="btn_checkExtendedUpdates"/>
+
+    <item type="id" name="btn_showUserId" />
+    <item type="id" name="btn_userId" />
 </resources>

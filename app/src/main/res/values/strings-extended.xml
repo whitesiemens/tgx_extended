@@ -22,4 +22,7 @@
 	<string name="DonateDesc">Support modification development.</string>
 	<string name="OTACheck">Check for update</string>
 
+	<string name="ShowUserId">Show user ID </string>
+	<string name="ChatId">User ID</string>
+
 </resources>
