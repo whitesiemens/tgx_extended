@@ -22,7 +22,15 @@
 	<string name="DonateDesc">Support modification development.</string>
 	<string name="OTACheck">Check for update</string>
 
+	<string name="ProfilePreferences">Profile</string>
+
 	<string name="ShowUserId">Show user ID </string>
 	<string name="ChatId">User ID</string>
+
+	<string name="DrawerPreferences">Drawer</string>
+
+	<string name="HidePhoneNumber">Hide phone number</string>
+	<string name="HidePhoneNumberDesc">This setting will also hide the phone number in the profile.</string>
+	<string name="PhoneNumberHidden">Phone number hidden</string>
 
 </resources>

@@ -19,4 +19,6 @@
 
     <item type="id" name="btn_showUserId" />
     <item type="id" name="btn_userId" />
+
+    <item type="id" name="btn_hidePhoneNumber" />
 </resources>

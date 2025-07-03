@@ -62,7 +62,9 @@ import me.vkryl.core.ColorUtils;
 import me.vkryl.core.StringUtils;
 import me.vkryl.core.lambda.Destroyable;
 
-public class DrawerHeaderView extends View implements Destroyable, GlobalAccountListener, GlobalCountersListener, FactorAnimator.Target, ClickHelper.Delegate, TGLegacyManager.EmojiLoadListener {
+import com.tgx.extended.Config;
+
+public class DrawerHeaderView extends View implements Destroyable, GlobalAccountListener, GlobalCountersListener, FactorAnimator.Target, ClickHelper.Delegate, TGLegacyManager.EmojiLoadListener, Config.SettingsChangeListener {
   private static final int DRAWER_ALPHA = 90;
 
   // private final TextPaint namePaint, phonePaint;
@@ -103,6 +105,8 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
     setUser(account);
 
     TGLegacyManager.instance().addEmojiListener(this);
+
+    Config.instance().addSettingsListener(this);
 
     ViewUtils.setBackground(this, new FillingDrawable(ColorId.headerBackground) {
       @Override
@@ -190,13 +194,19 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
     return (emojiStatus != null && emojiStatus.onTouchEvent(this, event)) || clickHelper.onTouchEvent(this, event);
   }
 
-  // Other
+  @Override
+  public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
+    if (key.equals(Config.KEY_HIDE_PHONE_NUMBER)) {
+      setUser(currentAccount);
+    }
+  }
 
   @Override
   public void performDestroy () {
     TdlibManager.instance().global().removeAccountListener(this);
     TdlibManager.instance().global().removeCountersListener(this);
     TGLegacyManager.instance().removeEmojiListener(this);
+    Config.instance().removeSettingsListener(this);
     if (displayInfoFuture != null) {
       displayInfoFuture.performDestroy();
       displayInfoFuture = null;
@@ -275,6 +285,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
     private final TdlibAccount account;
 
     private final long userId;
+    private final String username;
     private final String name, phone;
     private ImageFile avatar, avatarFull;
     private final AvatarPlaceholder avatarPlaceholder;
@@ -319,8 +330,11 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
       userId = account.getKnownUserId();
       if (account.hasUserInfo()) {
         name = account.getName();
-        if (Settings.instance().needHidePhoneNumber()) {
-          phone = Strings.replaceNumbers(Strings.formatPhone(account.getPhoneNumber()));
+        username = account.getUsername();
+        if (Config.hidePhoneNumber && username != null) {
+          phone = "@" + username;
+        } else if (Config.hidePhoneNumber && username == null) {
+          phone = String.valueOf(userId);
         } else {
           phone = Strings.formatPhone(account.getPhoneNumber());
         }

@@ -569,7 +569,11 @@ public class SettingsController extends ViewController<Void> implements
         } else if (itemId == R.id.btn_peer_id) {
           view.setData(Strings.buildCounter(tdlib.myUserId(true)));
         } else if (itemId == R.id.btn_phone) {
-          view.setData(myPhone);
+          if (Config.hidePhoneNumber) {
+            view.setData(R.string.PhoneNumberHidden);
+          } else {
+            view.setData(myPhone);
+          }
         } else if (itemId == R.id.btn_bio) {
           TdApi.FormattedText text;
           if (about == null) {

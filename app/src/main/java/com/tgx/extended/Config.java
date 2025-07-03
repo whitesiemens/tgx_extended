@@ -26,8 +26,10 @@ public class Config {
   private static final String KEY_VERSION = "version";
 
   public static final String KEY_SHOW_USER_ID = "show_user_id";
+  public static final String KEY_HIDE_PHONE_NUMBER = "hide_phone_number";
 
   public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
+  public static boolean hidePhoneNumber = instance().getBoolean(KEY_HIDE_PHONE_NUMBER, false);
 
   private Config () {
     File configDir = new File(UI.getAppContext().getFilesDir(), "extended_config");
@@ -166,5 +168,10 @@ public class Config {
 
   public void toggleShowUserId () {
     putBoolean(KEY_SHOW_USER_ID, showUserId ^= true);
+  }
+
+  public void toggleHidePhoneNumber () {
+    putBoolean(KEY_HIDE_PHONE_NUMBER, hidePhoneNumber ^= true);
+    notifyClientListeners(KEY_HIDE_PHONE_NUMBER, !hidePhoneNumber, hidePhoneNumber);
   }
 }

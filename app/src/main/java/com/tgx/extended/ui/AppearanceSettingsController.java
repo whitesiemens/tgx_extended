@@ -38,7 +38,11 @@ public class AppearanceSettingsController extends RecyclerViewController<Void> i
   private SettingsAdapter adapter;
 
   @Override public void onClick(View v) {
-  	// TODO: Later
+  	int viewId = v.getId();
+    if (viewId == R.id.btn_hidePhoneNumber) {
+      Config.instance().toggleHidePhoneNumber();
+      adapter.updateValuedSettingById(viewId);
+    }
   }
 
   @Override protected void onCreateView(Context context, CustomRecyclerView recyclerView) {
@@ -46,13 +50,21 @@ public class AppearanceSettingsController extends RecyclerViewController<Void> i
   			@Override protected void setValuedSetting(ListItem item, SettingView view, boolean isUpdate) {
   				view.setDrawModifier(item.getDrawModifier());
   				int itemId = item.getId();
-  				// TODO: Later
+  				if (itemId == R.id.btn_hidePhoneNumber) {
+            view.setData(R.string.HidePhoneNumberDesc);
+            view.getToggler().setRadioEnabled(Config.hidePhoneNumber, isUpdate);
+          }
         }
       };
 
       ArrayList<ListItem> items = new ArrayList<>();
 
-      // TODO: Later
+      items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
+
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerPreferences));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
       adapter.setItems(items, true);
       recyclerView.setAdapter(adapter);
