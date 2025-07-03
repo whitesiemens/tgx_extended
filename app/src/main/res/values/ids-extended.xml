@@ -23,4 +23,8 @@
     <item type="id" name="btn_hidePhoneNumber" />
 
     <item type="id" name="btn_hideMessageButtons" />
+    <item type="id" name="btn_disableCameraButton" />
+    <item type="id" name="btn_disableRecordButton" />
+    <item type="id" name="btn_disableCommandButton" />
+    <item type="id" name="btn_disableSenderButton" />
 </resources>

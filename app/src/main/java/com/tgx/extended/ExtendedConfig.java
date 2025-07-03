@@ -34,6 +34,10 @@ public class ExtendedConfig {
 
   public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
   public static boolean hidePhoneNumber = instance().getBoolean(KEY_HIDE_PHONE_NUMBER, false);
+  public static boolean disableCameraButton = instance().getBoolean(KEY_DISABLE_CAM_BTN, false);
+  public static boolean disableRecordButton = instance().getBoolean(KEY_DISABLE_RCD_BTN, false);
+  public static boolean disableCommandButton = instance().getBoolean(KEY_DISABLE_CMD_BTN, false);
+  public static boolean disableSenderButton = instance().getBoolean(KEY_DISABLE_SNDR_BTN, false);
 
   private ExtendedConfig () {
     File configDir = new File(UI.getAppContext().getFilesDir(), "extended_config");
