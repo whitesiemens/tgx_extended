@@ -61,7 +61,7 @@ public class ChatsSettingsController extends RecyclerViewController<Void> implem
       if (ExtendedConfig.disableRecordButton == (result.get(R.id.btn_disableRecordButton) == 0)) {
         ExtendedConfig.instance().toggleDisableRecordButton();
       }
-      if (ExtendedConfig.disableSenerButton == (result.get(R.id.btn_disableSendAsButton) == 0)) {
+      if (ExtendedConfig.disableSenderButton == (result.get(R.id.btn_disableSenderButton) == 0)) {
         ExtendedConfig.instance().toggleDisableSenderButton();
       }
       adapter.updateValuedSettingById(R.id.btn_hideMessageButtons);
