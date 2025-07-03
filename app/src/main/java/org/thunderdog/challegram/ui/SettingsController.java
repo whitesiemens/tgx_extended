@@ -108,7 +108,7 @@ public class SettingsController extends ViewController<Void> implements
   Menu, MoreDelegate, OptionDelegate,
   TdlibCache.MyUserDataChangeListener, ConnectionListener, StickersListener, MediaLayout.MediaGalleryCallback,
   ActivityResultHandler, View.OnLongClickListener, SessionListener, GlobalTokenStateListener, TdlibCache.UserDataChangeListener,
-  TdlibOptionListener {
+  TdlibOptionListener, ExtendedConfig.SettingsChangeListener {
 
   private final AvatarPickerManager avatarPickerManager;
   private ComplexHeaderView headerCell;
@@ -141,6 +141,13 @@ public class SettingsController extends ViewController<Void> implements
     if (!oneShot) {
       oneShot = true;
       tdlib.listeners().subscribeToStickerUpdates(this);
+    }
+  }
+
+  @Override
+  public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
+    if (key.equals(ExtendedConfig.KEY_HIDE_PHONE_NUMBER)) {
+      this.contentView.setAdapter(adapter);
     }
   }
 
@@ -749,6 +756,7 @@ public class SettingsController extends ViewController<Void> implements
     tdlib.listeners().addOptionsListener(this);
     TGLegacyManager.instance().addEmojiListener(adapter);
     TdlibManager.instance().global().addTokenStateListener(this);
+    ExtendedConfig.instance().addSettingsListener(this);
 
     loadActiveSessions();
 
@@ -939,6 +947,7 @@ public class SettingsController extends ViewController<Void> implements
     tdlib.listeners().removeOptionListener(this);
     TGLegacyManager.instance().removeEmojiListener(adapter);
     TdlibManager.instance().global().removeTokenStateListener(this);
+    ExtendedConfig.instance().removeSettingsListener(this);
     headerCell.performDestroy();
   }
 
