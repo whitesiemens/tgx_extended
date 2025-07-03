@@ -100,7 +100,7 @@ import me.vkryl.core.reference.ReferenceList;
 import tgx.td.ChatId;
 import tgx.td.Td;
 
-import com.tgx.extended.Config;
+import com.tgx.extended.ExtendedConfig;
 import com.tgx.extended.ui.ExtendedSettingsController;
 
 public class SettingsController extends ViewController<Void> implements
@@ -569,7 +569,7 @@ public class SettingsController extends ViewController<Void> implements
         } else if (itemId == R.id.btn_peer_id) {
           view.setData(Strings.buildCounter(tdlib.myUserId(true)));
         } else if (itemId == R.id.btn_phone) {
-          if (Config.hidePhoneNumber) {
+          if (ExtendedConfig.hidePhoneNumber) {
             view.setData(R.string.PhoneNumberHidden);
           } else {
             view.setData(myPhone);
@@ -609,7 +609,7 @@ public class SettingsController extends ViewController<Void> implements
     }
     items.add(new ListItem(ListItem.TYPE_SEPARATOR));
     items.add(new ListItem(ListItem.TYPE_INFO_MULTILINE, R.id.btn_bio, R.drawable.baseline_info_24, R.string.UserBio).setContentStrings(R.string.LoadingInformation, R.string.BioNone));
-    if (Config.showUserId) {
+    if (ExtendedConfig.showUserId) {
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
       items.add(new ListItem(ListItem.TYPE_INFO_SETTING, R.id.btn_userId, R.drawable.baseline_code_24, R.string.ChatId));
     }

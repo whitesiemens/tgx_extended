@@ -19,8 +19,7 @@ import org.thunderdog.challegram.v.CustomRecyclerView;
 
 import java.util.ArrayList;
 
-import com.tgx.extended.Config;
-import com.tgx.extended.Data;
+import com.tgx.extended.ExtendedConfig;
 
 public class AppearanceSettingsController extends RecyclerViewController<Void> implements View.OnClickListener {
   public AppearanceSettingsController (Context context, Tdlib tdlib) {
@@ -40,7 +39,7 @@ public class AppearanceSettingsController extends RecyclerViewController<Void> i
   @Override public void onClick(View v) {
   	int viewId = v.getId();
     if (viewId == R.id.btn_hidePhoneNumber) {
-      Config.instance().toggleHidePhoneNumber();
+      ExtendedConfig.instance().toggleHidePhoneNumber();
       adapter.updateValuedSettingById(viewId);
     }
   }
@@ -52,7 +51,7 @@ public class AppearanceSettingsController extends RecyclerViewController<Void> i
   				int itemId = item.getId();
   				if (itemId == R.id.btn_hidePhoneNumber) {
             view.setData(R.string.HidePhoneNumberDesc);
-            view.getToggler().setRadioEnabled(Config.hidePhoneNumber, isUpdate);
+            view.getToggler().setRadioEnabled(ExtendedConfig.hidePhoneNumber, isUpdate);
           }
         }
       };

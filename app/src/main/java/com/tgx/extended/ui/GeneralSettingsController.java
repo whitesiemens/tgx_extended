@@ -19,7 +19,7 @@ import org.thunderdog.challegram.v.CustomRecyclerView;
 
 import java.util.ArrayList;
 
-import com.tgx.extended.Config;
+import com.tgx.extended.ExtendedConfig;
 
 public class GeneralSettingsController extends RecyclerViewController<Void> implements View.OnClickListener {
   public GeneralSettingsController (Context context, Tdlib tdlib) {
@@ -39,7 +39,7 @@ public class GeneralSettingsController extends RecyclerViewController<Void> impl
   @Override public void onClick(View v) {
   	int viewId = v.getId();
     if (viewId == R.id.btn_showUserId) {
-      Config.instance().toggleShowUserId();
+      ExtendedConfig.instance().toggleShowUserId();
       adapter.updateValuedSettingById(viewId);
     }
   }
@@ -50,7 +50,7 @@ public class GeneralSettingsController extends RecyclerViewController<Void> impl
   				view.setDrawModifier(item.getDrawModifier());
   				int itemId = item.getId();
   				if (itemId == R.id.btn_showUserId) {
-            view.getToggler().setRadioEnabled(Config.showUserId, isUpdate);
+            view.getToggler().setRadioEnabled(ExtendedConfig.showUserId, isUpdate);
           }
         }
       };

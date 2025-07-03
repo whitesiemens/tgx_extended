@@ -17,11 +17,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import me.vkryl.core.reference.ReferenceList;
 import me.vkryl.leveldb.LevelDB;
 
-public class Config {
+public class ExtendedConfig {
 
   private static final int VERSION = 1;
   private static final AtomicBoolean hasInstance = new AtomicBoolean(false);
-  private static volatile Config instance;
+  private static volatile ExtendedConfig instance;
   private final LevelDB config;
   private static final String KEY_VERSION = "version";
 
@@ -31,7 +31,7 @@ public class Config {
   public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
   public static boolean hidePhoneNumber = instance().getBoolean(KEY_HIDE_PHONE_NUMBER, false);
 
-  private Config () {
+  private ExtendedConfig () {
     File configDir = new File(UI.getAppContext().getFilesDir(), "extended_config");
     if (!configDir.exists() && !configDir.mkdir()) {
       throw new IllegalStateException("Unable to create working directory");
@@ -64,12 +64,12 @@ public class Config {
     Log.i("Opened database in %dms", SystemClock.uptimeMillis() - ms);
   }
 
-  public static Config instance () {
+  public static ExtendedConfig instance () {
     if (instance == null) {
-      synchronized (Config.class) {
+      synchronized (ExtendedConfig.class) {
         if (instance == null) {
           if (hasInstance.getAndSet(true)) throw new AssertionError();
-          instance = new Config();
+          instance = new ExtendedConfig();
         }
       }
     }

@@ -62,9 +62,9 @@ import me.vkryl.core.ColorUtils;
 import me.vkryl.core.StringUtils;
 import me.vkryl.core.lambda.Destroyable;
 
-import com.tgx.extended.Config;
+import com.tgx.extended.ExtendedConfig;
 
-public class DrawerHeaderView extends View implements Destroyable, GlobalAccountListener, GlobalCountersListener, FactorAnimator.Target, ClickHelper.Delegate, TGLegacyManager.EmojiLoadListener, Config.SettingsChangeListener {
+public class DrawerHeaderView extends View implements Destroyable, GlobalAccountListener, GlobalCountersListener, FactorAnimator.Target, ClickHelper.Delegate, TGLegacyManager.EmojiLoadListener, ExtendedConfig.SettingsChangeListener {
   private static final int DRAWER_ALPHA = 90;
 
   // private final TextPaint namePaint, phonePaint;
@@ -106,7 +106,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
 
     TGLegacyManager.instance().addEmojiListener(this);
 
-    Config.instance().addSettingsListener(this);
+    ExtendedConfig.instance().addSettingsListener(this);
 
     ViewUtils.setBackground(this, new FillingDrawable(ColorId.headerBackground) {
       @Override
@@ -196,7 +196,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
 
   @Override
   public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
-    if (key.equals(Config.KEY_HIDE_PHONE_NUMBER)) {
+    if (key.equals(ExtendedConfig.KEY_HIDE_PHONE_NUMBER)) {
       setUser(currentAccount);
     }
   }
@@ -206,7 +206,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
     TdlibManager.instance().global().removeAccountListener(this);
     TdlibManager.instance().global().removeCountersListener(this);
     TGLegacyManager.instance().removeEmojiListener(this);
-    Config.instance().removeSettingsListener(this);
+    ExtendedConfig.instance().removeSettingsListener(this);
     if (displayInfoFuture != null) {
       displayInfoFuture.performDestroy();
       displayInfoFuture = null;
@@ -331,9 +331,9 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
       if (account.hasUserInfo()) {
         name = account.getName();
         username = account.getUsername();
-        if (Config.hidePhoneNumber && username != null) {
+        if (ExtendedConfig.hidePhoneNumber && username != null) {
           phone = "@" + username;
-        } else if (Config.hidePhoneNumber && username == null) {
+        } else if (ExtendedConfig.hidePhoneNumber && username == null) {
           phone = String.valueOf(userId);
         } else {
           phone = Strings.formatPhone(account.getPhoneNumber());

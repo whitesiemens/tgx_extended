@@ -19,7 +19,7 @@ import org.thunderdog.challegram.v.CustomRecyclerView;
 
 import java.util.ArrayList;
 
-import com.tgx.extended.Config;
+import com.tgx.extended.ExtendedConfig;
 
 public class ChatsSettingsController extends RecyclerViewController<Void> implements View.OnClickListener {
   public ChatsSettingsController (Context context, Tdlib tdlib) {

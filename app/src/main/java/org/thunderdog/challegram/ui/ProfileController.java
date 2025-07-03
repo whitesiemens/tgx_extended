@@ -151,7 +151,7 @@ import tgx.td.ChatId;
 import tgx.td.Td;
 import tgx.td.TdConstants;
 
-import com.tgx.extended.Config;
+import com.tgx.extended.ExtendedConfig;
 
 public class ProfileController extends ViewController<ProfileController.Args> implements
   Menu,
@@ -2476,7 +2476,7 @@ public class ProfileController extends ViewController<ProfileController.Args> im
     }
 
     final ListItem userIdItem = newUserIdItem();
-    if (Config.showUserId && userIdItem != null) {
+    if (ExtendedConfig.showUserId && userIdItem != null) {
       if (addedCount > 0) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       }
@@ -3088,7 +3088,7 @@ public class ProfileController extends ViewController<ProfileController.Args> im
     }
 
     final ListItem userIdItem = newUserIdItem();
-    if (Config.showUserId && userIdItem != null) {
+    if (ExtendedConfig.showUserId && userIdItem != null) {
       if (addedCount > 0) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       }
@@ -3171,7 +3171,7 @@ public class ProfileController extends ViewController<ProfileController.Args> im
     }
 
     final ListItem userIdItem = newUserIdItem();
-    if (Config.showUserId && userIdItem != null) {
+    if (ExtendedConfig.showUserId && userIdItem != null) {
       if (addedCount > 0) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       }
