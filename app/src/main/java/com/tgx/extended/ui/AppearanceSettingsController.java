@@ -62,7 +62,7 @@ public class AppearanceSettingsController extends RecyclerViewController<Void> i
 
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerPreferences));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
       adapter.setItems(items, true);
