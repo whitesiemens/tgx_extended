@@ -27,4 +27,6 @@
     <item type="id" name="btn_disableRecordButton" />
     <item type="id" name="btn_disableCommandButton" />
     <item type="id" name="btn_disableSenderButton" />
+
+    <item type="id" name="btn_drawerItems" />
 </resources>

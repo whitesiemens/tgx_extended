@@ -93,6 +93,8 @@ import me.vkryl.core.collection.IntList;
 import me.vkryl.core.lambda.CancellableRunnable;
 import tgx.td.ChatId;
 
+import com.tgx.extended.ExtendedConfig;
+
 public class DrawerController extends ViewController<Void> implements View.OnClickListener, Settings.ProxyChangeListener, GlobalAccountListener, GlobalCountersListener, BaseView.CustomControllerProvider, BaseView.ActionListProvider, View.OnLongClickListener, TdlibSettingsManager.NotificationProblemListener, TdlibOptionListener, SessionListener, GlobalTokenStateListener {
   private int currentWidth, shadowWidth;
 
@@ -258,23 +260,33 @@ public class DrawerController extends ViewController<Void> implements View.OnCli
       headerView.getExpanderView().setExpanded(true, false);
     }
 
-    items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_contacts, R.drawable.baseline_perm_contact_calendar_24, R.string.Contacts));
-    if (Settings.instance().chatFoldersEnabled()) {
+    if (!ExtendedConfig.drawerHideContacts) {
+      items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_contacts, R.drawable.baseline_perm_contact_calendar_24, R.string.Contacts));
+    }
+    if (!ExtendedConfig.drawerHideCalls && Settings.instance().chatFoldersEnabled()) {
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_calls, R.drawable.baseline_call_24, R.string.Calls));
     }
-    items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_savedMessages, R.drawable.baseline_bookmark_24, R.string.SavedMessages));
+    if (!ExtendedConfig.drawerHideFavourite) {
+      items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_savedMessages, R.drawable.baseline_bookmark_24, R.string.SavedMessages));
+    }
     this.settingsClickBait = getSettingsClickBait();
     items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_settings, R.drawable.baseline_settings_24, R.string.Settings));
-    items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_invite, R.drawable.baseline_person_add_24, R.string.InviteFriends));
+    if (!ExtendedConfig.drawerHideInvite) {
+      items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_invite, R.drawable.baseline_person_add_24, R.string.InviteFriends));
+    }
 
     this.proxyAvailable = Settings.instance().getAvailableProxyCount() > 0;
     if (proxyAvailable) {
       proxyItem.setSelected(Settings.instance().getEffectiveProxyId() != Settings.PROXY_ID_NONE);
       items.add(proxyItem);
     }
-    items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_help, R.drawable.baseline_help_24, R.string.Help));
-    items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
-    items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM_WITH_RADIO, R.id.btn_night, R.drawable.baseline_brightness_2_24, R.string.NightMode, R.id.btn_night, Theme.isDark()));
+    if (!ExtendedConfig.drawerHideHelp) {
+      items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_help, R.drawable.baseline_help_24, R.string.Help));
+    }
+    if (!ExtendedConfig.drawerHideNight) {
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM_WITH_RADIO, R.id.btn_night, R.drawable.baseline_brightness_2_24, R.string.NightMode, R.id.btn_night, Theme.isDark()));
+    }
     if (Test.NEED_CLICK) {
       items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_reportBug, R.drawable.baseline_bug_report_24, Test.CLICK_NAME, false));
@@ -760,8 +772,25 @@ public class DrawerController extends ViewController<Void> implements View.OnCli
       adapter.getItems().addAll(1, items);
       adapter.notifyItemRangeInserted(1, items.size());
     } else {
-      int count = adapter.indexOfViewById(R.id.btn_contacts) - 1;
-      adapter.removeRange(1, count);
+      int[] drawerItemIds = {
+        R.id.btn_contacts,
+        R.id.btn_calls,
+        R.id.btn_savedMessages,
+        R.id.btn_settings,
+        R.id.btn_invite,
+        R.id.btn_help,
+        R.id.btn_night
+      };
+      int firstItemIndex = Integer.MAX_VALUE;
+      for (int id : drawerItemIds) {
+        int index = adapter.indexOfViewById(id);
+        if (index >= 0 && index < firstItemIndex) {
+          firstItemIndex = index;
+        }
+      }
+      if (firstItemIndex > 1 && firstItemIndex != Integer.MAX_VALUE) {
+        adapter.removeRange(1, firstItemIndex - 1);
+      }
     }
   }
 

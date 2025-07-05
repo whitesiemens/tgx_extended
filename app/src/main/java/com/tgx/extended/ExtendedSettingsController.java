@@ -94,7 +94,42 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       adapter.updateValuedSettingById(viewId);
     } else if (viewId == R.id.btn_hideMessageButtons) {
       showMessagePanelOptions();
+    } else if (viewId == R.id.btn_drawerItems) {
+      showDrawerItems();
     }
+  }
+
+  private void showDrawerItems () {
+    showSettings(new SettingsWrapBuilder(R.id.btn_drawerItems).addHeaderItem(
+      new ListItem(ListItem.TYPE_INFO, R.id.text_title, 0, R.string.DrawerItems, false)).setRawItems(
+      new ListItem[] {
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_contacts, 0, R.string.Contacts, ExtendedConfig.drawerHideContacts),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_calls, 0, R.string.Calls, ExtendedConfig.drawerHideCalls),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_savedMessages, 0, R.string.SavedMessages, ExtendedConfig.drawerHideFavourite),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_invite, 0, R.string.InviteFriends, ExtendedConfig.drawerHideInvite),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_help, 0, R.string.Help, ExtendedConfig.drawerHideHelp),
+        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_night, 0, R.string.NightMode, ExtendedConfig.drawerHideNight)
+      }).setIntDelegate((id, result) -> {
+      if (ExtendedConfig.drawerHideContacts == (result.get(R.id.btn_contacts) == 0)) {
+        ExtendedConfig.instance().toggleDrawerHideContacts();
+      }
+      if (ExtendedConfig.drawerHideCalls == (result.get(R.id.btn_calls) == 0)) {
+        ExtendedConfig.instance().toggleDrawerHideCalls();
+      }
+      if (ExtendedConfig.drawerHideFavourite == (result.get(R.id.btn_savedMessages) == 0)) {
+        ExtendedConfig.instance().toggleDrawerHideFavourite();
+      }
+      if (ExtendedConfig.drawerHideInvite == (result.get(R.id.btn_invite) == 0)) {
+        ExtendedConfig.instance().toggleDrawerHideInvite();
+      }
+      if (ExtendedConfig.drawerHideHelp == (result.get(R.id.btn_invite) == 0)) {
+        ExtendedConfig.instance().toggleDrawerHideHelp();
+      }
+      if (ExtendedConfig.drawerHideNight == (result.get(R.id.btn_invite) == 0)) {
+        ExtendedConfig.instance().toggleDrawerHideNight();
+      }
+      adapter.updateValuedSettingById(R.id.btn_drawerItems);
+    }));
   }
 
   private void showMessagePanelOptions () {
@@ -153,6 +188,20 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
             view.getToggler().setRadioEnabled(ExtendedConfig.disableSenderButton, isUpdate);
           } else if (itemId == R.id.btn_hideMessageButtons) {
             view.setData(R.string.HideMessageButtonsDesc);
+          } else if (itemId == R.id.btn_drawerItems) {
+            view.setData(R.string.DrawerItemsDesc);
+          } else if (itemId == R.id.btn_contacts) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideContacts, isUpdate);
+          } else if (itemId == R.id.btn_calls) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideCalls, isUpdate);
+          } else if (itemId == R.id.btn_savedMessages) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideFavourite, isUpdate);
+          } else if (itemId == R.id.btn_invite) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideInvite, isUpdate);
+          } else if (itemId == R.id.btn_help) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideHelp, isUpdate);
+          } else if (itemId == R.id.btn_night) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideNight, isUpdate);
           }
         }
       };
@@ -170,6 +219,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerPreferences));
         items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
         items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
+        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_drawerItems, 0, R.string.DrawerItems));
         items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
       } else if (mode == MODE_CHATS) {
         items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.MessagePanelPreferences));

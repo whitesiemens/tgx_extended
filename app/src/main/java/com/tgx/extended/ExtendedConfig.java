@@ -31,6 +31,12 @@ public class ExtendedConfig {
   public static final String KEY_DISABLE_RCD_BTN = "disable_record_button";
   public static final String KEY_DISABLE_CMD_BTN = "disable_command_button";
   public static final String KEY_DISABLE_SNDR_BTN = "disable_sender_button";
+  public static final String KEY_DRAWER_HIDE_CONTACTS = "drawer_hide_contacts";
+  public static final String KEY_DRAWER_HIDE_CALLS = "drawer_hide_calls";
+  public static final String KEY_DRAWER_HIDE_FAVOURITE = "drawer_hide_favourite";
+  public static final String KEY_DRAWER_HIDE_INVITE = "drawer_hide_invite";
+  public static final String KEY_DRAWER_HIDE_HELP = "drawer_hide_help";
+  public static final String KEY_DRAWER_HIDE_NIGHT = "drawer_hide_night";
 
   public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
   public static boolean hidePhoneNumber = instance().getBoolean(KEY_HIDE_PHONE_NUMBER, false);
@@ -38,6 +44,12 @@ public class ExtendedConfig {
   public static boolean disableRecordButton = instance().getBoolean(KEY_DISABLE_RCD_BTN, false);
   public static boolean disableCommandButton = instance().getBoolean(KEY_DISABLE_CMD_BTN, false);
   public static boolean disableSenderButton = instance().getBoolean(KEY_DISABLE_SNDR_BTN, false);
+  public static boolean drawerHideContacts = instance().getBoolean(KEY_DRAWER_HIDE_CONTACTS, false);
+  public static boolean drawerHideCalls = instance().getBoolean(KEY_DRAWER_HIDE_CALLS, false);
+  public static boolean drawerHideFavourite = instance().getBoolean(KEY_DRAWER_HIDE_FAVOURITE, false);
+  public static boolean drawerHideInvite = instance().getBoolean(KEY_DRAWER_HIDE_INVITE, false);
+  public static boolean drawerHideHelp = instance().getBoolean(KEY_DRAWER_HIDE_HELP, false);
+  public static boolean drawerHideNight = instance().getBoolean(KEY_DRAWER_HIDE_NIGHT, false);
 
   private ExtendedConfig () {
     File configDir = new File(UI.getAppContext().getFilesDir(), "extended_config");
@@ -201,5 +213,35 @@ public class ExtendedConfig {
   public void toggleDisableSenderButton () {
     putBoolean(KEY_DISABLE_SNDR_BTN, disableSenderButton ^= true);
     notifyClientListeners(KEY_DISABLE_SNDR_BTN, !disableSenderButton, disableSenderButton);
+  }
+
+  public void toggleDrawerHideContacts () {
+    putBoolean(KEY_DRAWER_HIDE_CONTACTS, drawerHideContacts ^= true);
+    notifyClientListeners(KEY_DRAWER_HIDE_CONTACTS, !drawerHideContacts, drawerHideContacts);
+  }
+
+  public void toggleDrawerHideCalls () {
+    putBoolean(KEY_DRAWER_HIDE_CALLS, drawerHideCalls ^= true);
+    notifyClientListeners(KEY_DRAWER_HIDE_CALLS, !drawerHideCalls, drawerHideCalls);
+  }
+
+  public void toggleDrawerHideFavourite () {
+    putBoolean(KEY_DRAWER_HIDE_FAVOURITE, drawerHideFavourite ^= true);
+    notifyClientListeners(KEY_DRAWER_HIDE_FAVOURITE, !drawerHideFavourite, drawerHideFavourite);
+  }
+
+  public void toggleDrawerHideInvite () {
+    putBoolean(KEY_DRAWER_HIDE_INVITE, drawerHideInvite ^= true);
+    notifyClientListeners(KEY_DRAWER_HIDE_INVITE, !drawerHideInvite, drawerHideInvite);
+  }
+
+  public void toggleDrawerHideHelp () {
+    putBoolean(KEY_DRAWER_HIDE_HELP, drawerHideHelp ^= true);
+    notifyClientListeners(KEY_DRAWER_HIDE_HELP, !drawerHideHelp, drawerHideHelp);
+  }
+
+  public void toggleDrawerHideNight () {
+    putBoolean(KEY_DRAWER_HIDE_NIGHT, drawerHideNight ^= true);
+    notifyClientListeners(KEY_DRAWER_HIDE_NIGHT, !drawerHideNight, drawerHideNight);
   }
 }
