@@ -20,6 +20,7 @@ import org.thunderdog.challegram.v.CustomRecyclerView;
 import java.util.ArrayList;
 
 import com.tgx.extended.ExtendedConfig;
+import com.tgx.extended.utils.SystemUtils;
 
 public class ExtendedSettingsController extends RecyclerViewController<ExtendedSettingsController.Args> implements View.OnClickListener {
   public ExtendedSettingsController (Context context, Tdlib tdlib) {
@@ -122,13 +123,14 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       if (ExtendedConfig.drawerHideInvite == (result.get(R.id.btn_invite) == 0)) {
         ExtendedConfig.instance().toggleDrawerHideInvite();
       }
-      if (ExtendedConfig.drawerHideHelp == (result.get(R.id.btn_invite) == 0)) {
+      if (ExtendedConfig.drawerHideHelp == (result.get(R.id.btn_help) == 0)) {
         ExtendedConfig.instance().toggleDrawerHideHelp();
       }
-      if (ExtendedConfig.drawerHideNight == (result.get(R.id.btn_invite) == 0)) {
+      if (ExtendedConfig.drawerHideNight == (result.get(R.id.btn_night) == 0)) {
         ExtendedConfig.instance().toggleDrawerHideNight();
       }
       adapter.updateValuedSettingById(R.id.btn_drawerItems);
+      SystemUtils.restartApp(getContext());
     }));
   }
 
