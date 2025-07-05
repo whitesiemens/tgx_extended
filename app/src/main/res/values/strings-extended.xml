@@ -7,6 +7,7 @@
 	<string name="DonateLink"></string>
 
 	<string name="ExtendedSettings">TGX Extended</string>
+	<string name="ExtendedSettingsDesc">Try out the new settings!</string>
 
 	<string name="GeneralSettings">General</string>
 	<string name="AppearanceSettings">Appearance</string>

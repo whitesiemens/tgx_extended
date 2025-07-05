@@ -259,16 +259,17 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
 
         items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.AboutExtended));
         items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_channelLink, 0, R.string.TelegramChannel));
+        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_channelLink, R.drawable.baseline_newspaper_24, R.string.TelegramChannel));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, 0, R.string.GitHub));
+        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, R.drawable.baseline_github_24, R.string.GitHub));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, 0, R.string.Crowdin));
+        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, R.string.baseline_translate_24, R.string.Crowdin));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_donateLink, 0, R.string.Donate));
+        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_donateLink, R.drawable.baseline_paid_24, R.string.Donate));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_checkExtendedUpdates, 0, R.string.OTACheck));
+        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_checkExtendedUpdates, R.drawable.baseline_update_24, R.string.OTACheck));
         items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+        items.add(new ListItem(ListItem.TYPE_BUILD_NO, R.id.btn_build, 0, ExtendedConfig.BUILD));
       }
 
       adapter.setItems(items, true);

@@ -25,6 +25,10 @@ public class ExtendedConfig {
   private final LevelDB config;
   private static final String KEY_VERSION = "version";
 
+  public static final String BUILD_VERSION = "1.0";
+  public static final String BUILD_CODENAME = "Andromeda";
+  public static final String BUILD = BUILD_VERSION + " " + BUILD_CODENAME;
+
   public static final String KEY_SHOW_USER_ID = "show_user_id";
   public static final String KEY_HIDE_PHONE_NUMBER = "hide_phone_number";
   public static final String KEY_DISABLE_CAM_BTN = "disable_camera_button";
