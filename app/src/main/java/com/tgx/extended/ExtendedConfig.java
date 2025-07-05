@@ -38,6 +38,7 @@ public class ExtendedConfig {
   public static final String KEY_DRAWER_HIDE_HELP = "drawer_hide_help";
   public static final String KEY_DRAWER_HIDE_NIGHT = "drawer_hide_night";
   public static final String KEY_DRAWER_BLUR = "drawer_blur";
+  public static final String KEY_DRAWER_DARKEN = "drawer_darken";
 
   public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
   public static boolean hidePhoneNumber = instance().getBoolean(KEY_HIDE_PHONE_NUMBER, false);
@@ -52,6 +53,7 @@ public class ExtendedConfig {
   public static boolean drawerHideHelp = instance().getBoolean(KEY_DRAWER_HIDE_HELP, false);
   public static boolean drawerHideNight = instance().getBoolean(KEY_DRAWER_HIDE_NIGHT, false);
   public static boolean drawerBlur = instance().getBoolean(KEY_DRAWER_BLUR, false);
+  public static boolean drawerDarken = instance().getBoolean(KEY_DRAWER_DARKEN, false);
 
   private ExtendedConfig () {
     File configDir = new File(UI.getAppContext().getFilesDir(), "extended_config");
@@ -250,5 +252,10 @@ public class ExtendedConfig {
   public void toggleDrawerBlur () {
     putBoolean(KEY_DRAWER_BLUR, drawerBlur ^= true);
     notifyClientListener(KEY_DRAWER_BLUR, !drawerBlur, drawerBlur);
+  }
+
+  public void toggleDrawerDarken () {
+    putBoolean(KEY_DRAWER_DARKEN, drawerDarken ^= true);
+    notifyClientListener(KEY_DRAWER_DARKEN, !drawerDarken, drawerDarken);
   }
 }

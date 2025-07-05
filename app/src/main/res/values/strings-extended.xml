@@ -42,6 +42,7 @@
 	<string name="DisableSenderButton">Send as</string>
 
 	<string name="DrawerBlur">Blur profile picture</string>
+	<string name="DrawerDarken">Darken profile picture</string>
 	<string name="DrawerItems">Hide drawer items</string>
 	<string name="DrawerItemsDesc">Hide useless elements of the drawer.</string>
 

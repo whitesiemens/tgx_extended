@@ -29,5 +29,6 @@
     <item type="id" name="btn_disableSenderButton" />
 
     <item type="id" name="btn_drawerBlur" />
+    <item type="id" name="btn_drawerDarken" />
     <item type="id" name="btn_drawerItems" />
 </resources>

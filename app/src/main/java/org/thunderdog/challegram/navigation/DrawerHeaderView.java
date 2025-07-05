@@ -433,6 +433,11 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
             receiver.setRadius(cornerRadius);
             receiver.draw(c);
             receiver.restorePaintAlpha();
+            if (ExtendedConfig.drawerDarken) {
+              RectF rectF = Paints.getRectF();
+              rectF.set(left, top, right, bottom);
+              c.drawRoundRect(rectF, cornerRadius, cornerRadius, Paints.fillingPaint(ColorUtils.alphaColor(45, 0x1a000000)));
+            }
           } else {
             receiver.setRadius(0);
           }

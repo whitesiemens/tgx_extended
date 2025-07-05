@@ -90,6 +90,9 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
   	} else if (viewId == R.id.btn_drawerBlur) {
       ExtendedConfig.instance().toggleDrawerBlur();
       adapter.updateValuedSettingById(viewId);
+    } else if (viewId == R.id.btn_drawerDarken) {
+      ExtendedConfig.instance().toggleDrawerDarken();
+      adapter.updateValuedSettingById(viewId);
     } else if (viewId == R.id.btn_showUserId) {
       ExtendedConfig.instance().toggleShowUserId();
       adapter.updateValuedSettingById(viewId);
@@ -182,6 +185,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
             view.getToggler().setRadioEnabled(ExtendedConfig.showUserId, isUpdate);
           } else if (itemId == R.id.btn_drawerBlur) {
             view.getToggler().setRadioEnabled(ExtendedConfig.drawerBlur, isUpdate);
+          } else if (itemId == R.id.btn_drawerDarken) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerDarken, isUpdate);
           } else if (itemId == R.id.btn_hidePhoneNumber) {
             view.setData(R.string.HidePhoneNumberDesc);
             view.getToggler().setRadioEnabled(ExtendedConfig.hidePhoneNumber, isUpdate);
@@ -226,6 +231,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerPreferences));
         items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
         items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerBlur, 0, R.string.DrawerBlur));
+        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+        items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerDarken, 0, R.string.DrawerDarken));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
         items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
