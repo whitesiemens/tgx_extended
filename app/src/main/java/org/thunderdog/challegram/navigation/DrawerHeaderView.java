@@ -196,7 +196,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
 
   @Override
   public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
-    if (key.equals(ExtendedConfig.KEY_HIDE_PHONE_NUMBER)) {
+    if (key.equals(ExtendedConfig.KEY_HIDE_PHONE_NUMBER) || key.equals(ExtendedConfig.KEY_DRAWER_BLUR)) {
       setUser(currentAccount);
     }
   }
@@ -310,7 +310,10 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
         avatarFull = bigFile;
         avatarFull.setScaleType(ImageFile.CENTER_CROP);
         int drawerWidth = context.parent.getWidth();
-        if (drawerWidth < 512) {
+        if (ExtendedConfig.drawerBlur) {
+          avatarFull.setSize(160);
+          avatarFull.setNeedBlur();
+        } else if (drawerWidth < 512) {
           avatarFull.setSize(drawerWidth);
         }
       } else {

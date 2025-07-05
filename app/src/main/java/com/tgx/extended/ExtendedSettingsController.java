@@ -87,7 +87,10 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
   		tdlib.ui().openUrl(this, Lang.getString(R.string.DonateLink), new TdlibUi.UrlOpenParameters());
   	} else if (viewId == R.id.btn_checkExtendedUpdates) {
   		// TODO: Re-create official updater here.
-  	} else if (viewId == R.id.btn_showUserId) {
+  	} else if (viewId == R.id.btn_drawerBlur) {
+      ExtendedConfig.instance().toggleDrawerBlur();
+      adapter.updateValuedSettingById(viewId);
+    } else if (viewId == R.id.btn_showUserId) {
       ExtendedConfig.instance().toggleShowUserId();
       adapter.updateValuedSettingById(viewId);
     } else if (viewId == R.id.btn_hidePhoneNumber) {
@@ -177,6 +180,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
             view.setData("Already updated to latest version.");
           } else if (itemId == R.id.btn_showUserId) {
             view.getToggler().setRadioEnabled(ExtendedConfig.showUserId, isUpdate);
+          } else if (itemId == R.id.btn_drawerBlur) {
+            view.getToggler().setRadioEnabled(ExtendedConfig.drawerBlur, isUpdate);
           } else if (itemId == R.id.btn_hidePhoneNumber) {
             view.setData(R.string.HidePhoneNumberDesc);
             view.getToggler().setRadioEnabled(ExtendedConfig.hidePhoneNumber, isUpdate);
@@ -220,6 +225,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       } else if (mode == MODE_INTERFACE) {
         items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerPreferences));
         items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+        items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerBlur, 0, R.string.DrawerBlur));
+        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
         items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
         items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_drawerItems, 0, R.string.DrawerItems));
