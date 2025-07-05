@@ -30,11 +30,12 @@
 	<string name="DrawerPreferences">Drawer</string>
 
 	<string name="HidePhoneNumber">Hide phone number</string>
-	<string name="HidePhoneNumberDesc">This setting will also hide the phone number in the profile.</string>
+	<string name="HidePhoneNumberDesc">Will also hide the phone number in the profile.</string>
 	<string name="PhoneNumberHidden">Phone number hidden</string>
 
 	<string name="MessagePanelPreferences">Message panel</string>
 	<string name="HideMessageButtons">Hide message panel buttons</string>
+	<string name="HideMessageButtonsDesc">Hide useless attach buttons from message panel.</string>
 	<string name="DisableCameraButton">Camera</string>
 	<string name="DisableRecordButton">Voice message</string>
 	<string name="DisableCommandButton">Command (bots)</string>

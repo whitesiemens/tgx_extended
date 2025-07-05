@@ -101,7 +101,7 @@ import tgx.td.ChatId;
 import tgx.td.Td;
 
 import com.tgx.extended.ExtendedConfig;
-import com.tgx.extended.ui.ExtendedSettingsController;
+import com.tgx.extended.ExtendedSettingsController;
 
 public class SettingsController extends ViewController<Void> implements
   View.OnClickListener, ComplexHeaderView.Callback,
