@@ -22,6 +22,7 @@
 	<string name="Donate">Donate</string>
 	<string name="DonateDesc">Support modification development.</string>
 	<string name="OTACheck">Check for update</string>
+	<string name="UpdatesNotFound">No update available.</string>
 
 	<string name="ProfilePreferences">Profile</string>
 

@@ -131,7 +131,6 @@ public class SettingsThemeController extends RecyclerViewController<SettingsThem
   public void destroy () {
     super.destroy();
     cancelLocationRequest();
-    context().appUpdater().removeListener(this);
   }
 
   private void cancelLocationRequest () {
@@ -317,56 +316,6 @@ public class SettingsThemeController extends RecyclerViewController<SettingsThem
           if (item.getBoolValue())
             value = !value;
           v.getToggler().setRadioEnabled(value, isUpdate);
-        } else if (itemId == R.id.btn_updateAutomatically) {
-          int mode = Settings.instance().getAutoUpdateMode();
-          v.getToggler().setRadioEnabled(mode != Settings.AUTO_UPDATE_MODE_NEVER, isUpdate);
-          switch (mode) {
-            case Settings.AUTO_UPDATE_MODE_NEVER:
-              v.setData(R.string.AutoUpdateNever);
-              break;
-            case Settings.AUTO_UPDATE_MODE_ALWAYS:
-              v.setData(R.string.AutoUpdateAlways);
-              break;
-            case Settings.AUTO_UPDATE_MODE_WIFI_ONLY:
-              v.setData(R.string.AutoUpdateWiFi);
-              break;
-            case Settings.AUTO_UPDATE_MODE_PROMPT:
-              v.setData(R.string.AutoUpdatePrompt);
-              break;
-          }
-        } else if (itemId == R.id.btn_checkUpdates) {
-          switch (context().appUpdater().state()) {
-            case AppUpdater.State.NONE: {
-              v.setEnabledAnimated(true, isUpdate);
-              v.setName(R.string.CheckForUpdates);
-              break;
-            }
-            case AppUpdater.State.CHECKING: {
-              v.setEnabledAnimated(false, isUpdate);
-              v.setName(R.string.CheckingForUpdates);
-              break;
-            }
-            case AppUpdater.State.AVAILABLE: {
-              v.setEnabledAnimated(true, isUpdate);
-              long bytesToDownload = context().appUpdater().totalBytesToDownload() - context().appUpdater().bytesDownloaded();
-              if (bytesToDownload > 0) {
-                v.setName(Lang.getStringBold(R.string.DownloadUpdateSize, Strings.buildSize(bytesToDownload)));
-              } else {
-                v.setName(R.string.DownloadUpdate);
-              }
-              break;
-            }
-            case AppUpdater.State.DOWNLOADING: {
-              v.setEnabledAnimated(false, isUpdate);
-              v.setName(Lang.getDownloadProgress(context().appUpdater().bytesDownloaded(), context().appUpdater().totalBytesToDownload(), true));
-              break;
-            }
-            case AppUpdater.State.READY_TO_INSTALL: {
-              v.setEnabledAnimated(true, isUpdate);
-              v.setName(R.string.InstallUpdate);
-              break;
-            }
-          }
         }
       }
     };
@@ -528,27 +477,6 @@ public class SettingsThemeController extends RecyclerViewController<SettingsThem
         items.add(new SettingItem(SettingItem.TYPE_RADIO_SETTING, R.id.btn_systemEmoji, 0, R.string.AndroidEmoji));
       }*/
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-
-      if (AppInstallationUtil.isAppSideLoaded(UI.getAppContext())) {
-        items.addAll(Arrays.asList(
-          new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.InAppUpdates),
-          new ListItem(ListItem.TYPE_SHADOW_TOP),
-          new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_updateAutomatically, 0, R.string.AutoUpdate)
-        ));
-        if (Settings.instance().getAutoUpdateMode() != Settings.AUTO_UPDATE_MODE_NEVER) {
-          items.addAll(newAutoUpdateConfigurationItems());
-        }
-      } else {
-        items.addAll(Arrays.asList(
-          new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.AppUpdates),
-          new ListItem(ListItem.TYPE_SHADOW_TOP),
-          new ListItem(ListItem.TYPE_SETTING, R.id.btn_checkUpdates, 0, R.string.CheckForUpdates),
-          new ListItem(ListItem.TYPE_SEPARATOR_FULL),
-          new ListItem(ListItem.TYPE_SETTING, R.id.btn_subscribeToBeta, 0, R.string.SubscribeToBeta)
-        ));
-      }
-      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-      context().appUpdater().addListener(this);
 
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.Chats));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
@@ -1220,32 +1148,8 @@ public class SettingsThemeController extends RecyclerViewController<SettingsThem
         value = !value;
       Settings.instance().setNewSetting(item.getLongId(), value);
       if (value && item.getLongId() == Settings.SETTING_FLAG_DOWNLOAD_BETAS) {
-        context().appUpdater().checkForUpdates();
+        // context().appUpdater().checkForUpdates();
       }
-    } else if (viewId == R.id.btn_subscribeToBeta) {
-      tdlib.ui().subscribeToBeta(this);
-    } else if (viewId == R.id.btn_checkUpdates) {
-      switch (context().appUpdater().state()) {
-        case AppUpdater.State.NONE: {
-          context().appUpdater().checkForUpdates();
-          break;
-        }
-        case AppUpdater.State.CHECKING:
-        case AppUpdater.State.DOWNLOADING: {
-          // Do nothing.
-          break;
-        }
-        case AppUpdater.State.AVAILABLE: {
-          context().appUpdater().downloadUpdate();
-          break;
-        }
-        case AppUpdater.State.READY_TO_INSTALL: {
-          context().appUpdater().installUpdate();
-          break;
-        }
-      }
-    } else if (viewId == R.id.btn_updateAutomatically) {
-      showUpdateOptions();
     } else if (viewId == R.id.btn_saveToGallery) {
       Settings.instance().setSaveEditedMediaToGallery(adapter.toggleView(v));
     } else if (viewId == R.id.btn_mosaic) {

@@ -15,6 +15,7 @@ import org.thunderdog.challegram.tool.UI;
 import org.thunderdog.challegram.ui.ListItem;
 import org.thunderdog.challegram.ui.RecyclerViewController;
 import org.thunderdog.challegram.ui.SettingsAdapter;
+import org.thunderdog.challegram.util.AppUpdater;
 import org.thunderdog.challegram.v.CustomRecyclerView;
 
 import java.util.ArrayList;
@@ -62,6 +63,29 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
 
   private SettingsAdapter adapter;
 
+  @Overrlide public void destroy () {
+    super.destroy();
+    context().appUpdater().removeListener(this);
+  }
+
+  @Override
+  public void onAppUpdateStateChanged (int state, int oldState, boolean isApk) {
+    if (oldState == AppUpdater.State.CHECKING && state == AppUpdater.State.NONE) {
+      // Slight delay
+      runOnUiThread(() ->
+        adapter.updateValuedSettingById(R.id.btn_checkExtendedUpdates),
+        250
+      );
+    } else {
+      adapter.updateValuedSettingById(R.id.btn_checkExtendedUpdates);
+    }
+  }
+
+  @Override
+  public void onAppUpdateDownloadProgress (long bytesDownloaded, long totalBytesToDownload) {
+    adapter.updateValuedSettingById(R.id.btn_checkExtendedUpdates);
+  }
+
   @Override public void onClick(View v) {
   	int viewId = v.getId();
     ExtendedSettingsController c = new ExtendedSettingsController(context, tdlib);
@@ -103,6 +127,25 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       showMessagePanelOptions();
     } else if (viewId == R.id.btn_drawerItems) {
       showDrawerItems();
+    } else if (viewId == R.id.btn_checkExtendedUpdates) {
+      switch (context().appUpdater().state()) {
+        case AppUpdater.State.NONE: {
+          context().appUpdater().checkForUpdates();
+          break;
+        }
+        case AppUpdater.State.CHECKING:
+        case AppUpdater.State.DOWNLOADING: {
+          break;
+        }
+        case AppUpdater.State.AVAILABLE: {
+          context().appUpdater().downloadUpdate();
+          break;
+        }
+        case AppUpdater.State.READY_TO_INSTALL: {
+          context().appUpdater().installUpdate();
+          break;
+        }
+      }
     }
   }
 
@@ -178,9 +221,6 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
             view.setData(R.string.CrowdinDesc);
           } else if (itemId == R.id.btn_donateLink) {
             view.setData(R.string.DonateDesc);
-          } else if (itemId == R.id.btn_checkExtendedUpdates) {
-            // TODO: Dynamic string with last time checked.
-            view.setData("Already updated to latest version.");
           } else if (itemId == R.id.btn_showUserId) {
             view.getToggler().setRadioEnabled(ExtendedConfig.showUserId, isUpdate);
           } else if (itemId == R.id.btn_drawerBlur) {
@@ -214,6 +254,39 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
             view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideHelp, isUpdate);
           } else if (itemId == R.id.btn_night) {
             view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideNight, isUpdate);
+          } else if (itemId == R.id.btn_checkExtendedUpdates) {
+            switch (context().appUpdater().state()) {
+              case AppUpdater.State.NONE: {
+                view.setEnabledAnimated(true, isUpdate);
+                view.setData(R.string.UpdatesNotFound);
+                break;
+              }
+              case AppUpdater.State.CHECKING: {
+                view.setEnabledAnimated(false, isUpdate);
+                view.setData(R.string.CheckingForUpdates);
+                break;
+              }
+              case AppUpdater.State.AVAILABLE: {
+                view.setEnabledAnimated(true, isUpdate);
+                long bytesToDownload = context().appUpdater().totalBytesToDownload() - context().appUpdater().bytesDownloaded();
+                if (bytesToDownload > 0) {
+                  view.setData(Lang.getStringBold(R.string.DownloadUpdateSize, Strings.buildSize(bytesToDownload)));
+                } else {
+                  view.setData(R.string.DownloadUpdate);
+                }
+                break;
+              }
+              case AppUpdater.State.DOWNLOADING: {
+                view.setEnabledAnimated(false, isUpdate);
+                view.setData(Lang.getDownloadProgress(context().appUpdater().bytesDownloaded(), context().appUpdater().totalBytesToDownload(), true));
+                break;
+              }
+              case AppUpdater.State.READY_TO_INSTALL: {
+                view.setEnabledAnimated(true, isUpdate);
+                view.setData(R.string.InstallUpdate);
+                break;
+              }
+            }
           }
         }
       };
@@ -269,6 +342,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
         items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_checkExtendedUpdates, R.drawable.baseline_update_24, R.string.OTACheck));
         items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+        context().appUpdater().addListener(this);
         items.add(new ListItem(ListItem.TYPE_BUILD_NO, R.id.btn_build, 0, ExtendedConfig.BUILD));
       }
 
