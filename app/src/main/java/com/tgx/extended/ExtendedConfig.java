@@ -255,11 +255,11 @@ public class ExtendedConfig {
 
   public void toggleDrawerBlur () {
     putBoolean(KEY_DRAWER_BLUR, drawerBlur ^= true);
-    notifyClientListener(KEY_DRAWER_BLUR, !drawerBlur, drawerBlur);
+    notifyClientListeners(KEY_DRAWER_BLUR, !drawerBlur, drawerBlur);
   }
 
   public void toggleDrawerDarken () {
     putBoolean(KEY_DRAWER_DARKEN, drawerDarken ^= true);
-    notifyClientListener(KEY_DRAWER_DARKEN, !drawerDarken, drawerDarken);
+    notifyClientListeners(KEY_DRAWER_DARKEN, !drawerDarken, drawerDarken);
   }
 }

@@ -136,7 +136,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         ExtendedConfig.instance().toggleDrawerHideNight();
       }
       adapter.updateValuedSettingById(R.id.btn_drawerItems);
-      SystemUtils.restartApp(getContext());
+      SystemUtils.restartApp(context);
     }));
   }
 
@@ -263,7 +263,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
         items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, R.drawable.baseline_github_24, R.string.GitHub));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, R.string.baseline_translate_24, R.string.Crowdin));
+        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, R.drawable.baseline_translate_24, R.string.Crowdin));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
         items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_donateLink, R.drawable.baseline_paid_24, R.string.Donate));
         items.add(new ListItem(ListItem.TYPE_SEPARATOR));
