@@ -2,278 +2,259 @@ package com.tgx.extended;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Toast;
 
 import org.thunderdog.challegram.R;
-import org.thunderdog.challegram.U;
-import org.thunderdog.challegram.component.base.SettingView;
 import org.thunderdog.challegram.core.Lang;
 import org.thunderdog.challegram.navigation.SettingsWrapBuilder;
 import org.thunderdog.challegram.telegram.Tdlib;
 import org.thunderdog.challegram.telegram.TdlibUi;
-import org.thunderdog.challegram.tool.UI;
 import org.thunderdog.challegram.ui.ListItem;
 import org.thunderdog.challegram.ui.RecyclerViewController;
 import org.thunderdog.challegram.ui.SettingsAdapter;
 import org.thunderdog.challegram.v.CustomRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.tgx.extended.ExtendedConfig;
 import com.tgx.extended.utils.SystemUtils;
+import com.tgx.extended.ExtendedConfig.Setting;
+
+import static com.tgx.extended.ExtendedConfig.Setting.*;
 
 public class ExtendedSettingsController extends RecyclerViewController<ExtendedSettingsController.Args> implements View.OnClickListener {
-  public ExtendedSettingsController (Context context, Tdlib tdlib) {
-    super(context, tdlib);
-  }
 
-  @Override public int getId () {
-    return R.id.controller_extendedSettings;
-  }
-
-  public static final int MODE_GENERAL = 1;
-  public static final int MODE_INTERFACE = 2;
-  public static final int MODE_CHATS = 3;
-  public static final int MODE_MISC = 4;
-
+  private SettingsAdapter adapter;
   private int mode;
 
-  public static class Args {
-    private final int mode;
+  public static final int MODE_GENERAL = 1, MODE_INTERFACE = 2, MODE_CHATS = 3, MODE_MISC = 4;
+  public static final int OPTIONS_MESSAGE_PANEL = 1, OPTIONS_DRAWER = 2;
 
-    public Args (int mode) {
-      this.mode = mode;
-    }
+  public ExtendedSettingsController(Context ctx, Tdlib tdlib) {
+    super(ctx, tdlib);
+  }
+
+  public static class Args {
+    public final int mode;
+    public Args(int m) { mode = m; }
   }
 
   @Override
-  public void setArguments (Args args) {
+  public void setArguments(Args args) {
     super.setArguments(args);
-    this.mode = args.mode;
+    mode = args.mode;
   }
 
-  @Override public CharSequence getName() {
-    return mode == MODE_GENERAL
-      ? Lang.getString(R.string.GeneralSettings) : mode == MODE_INTERFACE
-      ? Lang.getString(R.string.AppearanceSettings) : mode == MODE_CHATS
-      ? Lang.getString(R.string.ChatsSettings) : mode == MODE_MISC
-      ? Lang.getString(R.string.MiscSettings) : Lang.getString(R.string.ExtendedSettings);
+  @Override
+  public int getId() {
+    return R.id.controller_extendedSettings;
   }
 
-  private SettingsAdapter adapter;
+  @Override
+  public CharSequence getName() {
+    if (mode == MODE_GENERAL) return Lang.getString(R.string.GeneralSettings);
+    if (mode == MODE_INTERFACE) return Lang.getString(R.string.AppearanceSettings);
+    if (mode == MODE_CHATS) return Lang.getString(R.string.ChatsSettings);
+    if (mode == MODE_MISC) return Lang.getString(R.string.MiscSettings);
+    return Lang.getString(R.string.ExtendedSettings);
+  }
 
-  @Override public void onClick(View v) {
-  	int viewId = v.getId();
-    ExtendedSettingsController c = new ExtendedSettingsController(context, tdlib);
-  	if (viewId == R.id.btn_generalSettings) {
-  		c.setArguments(new ExtendedSettingsController.Args(ExtendedSettingsController.MODE_GENERAL));
+  @Override
+  public void onClick(View v) {
+    int id = v.getId();
+    if (id == R.id.btn_generalSettings || id == R.id.btn_appearanceSettings || id == R.id.btn_chatsSettings || id == R.id.btn_miscSettings) {
+      if (id == R.id.btn_generalSettings) mode = MODE_GENERAL;
+      else if (id == R.id.btn_appearanceSettings) mode = MODE_INTERFACE;
+      else if (id == R.id.btn_chatsSettings) mode = MODE_CHATS;
+      else if (id == R.id.btn_miscSettings) mode = MODE_MISC;
+      ExtendedSettingsController c = new ExtendedSettingsController(context(), tdlib);
+      c.setArguments(new Args(mode));
       navigateTo(c);
-  	} else if (viewId == R.id.btn_appearanceSettings) {
-      c.setArguments(new ExtendedSettingsController.Args(ExtendedSettingsController.MODE_INTERFACE));
-  		navigateTo(c);
-  	} else if (viewId == R.id.btn_chatsSettings) {
-      c.setArguments(new ExtendedSettingsController.Args(ExtendedSettingsController.MODE_CHATS));
-  		navigateTo(c);
-  	} else if (viewId == R.id.btn_miscSettings) {
-      c.setArguments(new ExtendedSettingsController.Args(ExtendedSettingsController.MODE_MISC));
-  		navigateTo(c);
-  	} else if (viewId == R.id.btn_channelLink) {
-  		tdlib.ui().openUrl(this, Lang.getString(R.string.ExtendedChannelLink), new TdlibUi.UrlOpenParameters());
-  	} else if (viewId == R.id.btn_githubLink) {
-  		tdlib.ui().openUrl(this, Lang.getString(R.string.GithubLink), new TdlibUi.UrlOpenParameters());
-  	} else if (viewId == R.id.btn_crowdinLink) {
-  		tdlib.ui().openUrl(this, Lang.getString(R.string.CrowdinLink), new TdlibUi.UrlOpenParameters());
-  	} else if (viewId == R.id.btn_donateLink) {
-  		tdlib.ui().openUrl(this, Lang.getString(R.string.DonateLink), new TdlibUi.UrlOpenParameters());
-  	} else if (viewId == R.id.btn_checkExtendedUpdates) {
-  		// TODO: Re-create official updater here.
-  	} else if (viewId == R.id.btn_drawerBlur) {
-      ExtendedConfig.instance().toggleDrawerBlur();
-      adapter.updateValuedSettingById(viewId);
-    } else if (viewId == R.id.btn_drawerDarken) {
-      ExtendedConfig.instance().toggleDrawerDarken();
-      adapter.updateValuedSettingById(viewId);
-    } else if (viewId == R.id.btn_showUserId) {
-      ExtendedConfig.instance().toggleShowUserId();
-      adapter.updateValuedSettingById(viewId);
-    } else if (viewId == R.id.btn_hidePhoneNumber) {
-      ExtendedConfig.instance().toggleHidePhoneNumber();
-      adapter.updateValuedSettingById(viewId);
-    } else if (viewId == R.id.btn_hideMessageButtons) {
-      showMessagePanelOptions();
-    } else if (viewId == R.id.btn_drawerItems) {
-      showDrawerItems();
+    } else if (id == R.id.btn_channelLink) {
+      tdlib.ui().openUrl(this, Lang.getString(R.string.ExtendedChannelLink), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_githubLink) {
+      tdlib.ui().openUrl(this, Lang.getString(R.string.GithubLink), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_crowdinLink) {
+      tdlib.ui().openUrl(this, Lang.getString(R.string.CrowdinLink), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_donateLink) {
+      tdlib.ui().openUrl(this, Lang.getString(R.string.DonateLink), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_hideMessageButtons) {
+      showOptions(OPTIONS_MESSAGE_PANEL);
+    } else if (id == R.id.btn_drawerItems) {
+      showOptions(OPTIONS_DRAWER);
+    } else {
+      toggleSettingByViewId(id);
+      adapter.updateValuedSettingById(id);
     }
   }
 
-  private void showDrawerItems () {
-    showSettings(new SettingsWrapBuilder(R.id.btn_drawerItems).addHeaderItem(
-      new ListItem(ListItem.TYPE_INFO, R.id.text_title, 0, R.string.DrawerItems, false)).setRawItems(
-      new ListItem[] {
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_contacts, 0, R.string.Contacts, ExtendedConfig.drawerHideContacts),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_calls, 0, R.string.Calls, ExtendedConfig.drawerHideCalls),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_savedMessages, 0, R.string.SavedMessages, ExtendedConfig.drawerHideFavourite),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_invite, 0, R.string.InviteFriends, ExtendedConfig.drawerHideInvite),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_help, 0, R.string.Help, ExtendedConfig.drawerHideHelp),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_night, 0, R.string.NightMode, ExtendedConfig.drawerHideNight)
-      }).setIntDelegate((id, result) -> {
-      if (ExtendedConfig.drawerHideContacts == (result.get(R.id.btn_contacts) == 0)) {
-        ExtendedConfig.instance().toggleDrawerHideContacts();
-      }
-      if (ExtendedConfig.drawerHideCalls == (result.get(R.id.btn_calls) == 0)) {
-        ExtendedConfig.instance().toggleDrawerHideCalls();
-      }
-      if (ExtendedConfig.drawerHideFavourite == (result.get(R.id.btn_savedMessages) == 0)) {
-        ExtendedConfig.instance().toggleDrawerHideFavourite();
-      }
-      if (ExtendedConfig.drawerHideInvite == (result.get(R.id.btn_invite) == 0)) {
-        ExtendedConfig.instance().toggleDrawerHideInvite();
-      }
-      if (ExtendedConfig.drawerHideHelp == (result.get(R.id.btn_help) == 0)) {
-        ExtendedConfig.instance().toggleDrawerHideHelp();
-      }
-      if (ExtendedConfig.drawerHideNight == (result.get(R.id.btn_night) == 0)) {
-        ExtendedConfig.instance().toggleDrawerHideNight();
-      }
-      adapter.updateValuedSettingById(R.id.btn_drawerItems);
-      SystemUtils.restartApp(context);
-    }));
+  private static final Map<Integer, Setting> toggleSettingsMapping = Map.of(
+    R.id.btn_drawerBlur, DRAWER_BLUR,
+    R.id.btn_drawerDarken, DRAWER_DARKEN,
+    R.id.btn_showUserId, SHOW_USER_ID,
+    R.id.btn_hidePhoneNumber, HIDE_PHONE_NUMBER
+  );
+
+  private void toggleSettingByViewId(int id) {
+    Setting s = toggleSettingsMapping.get(id);
+    if (s != null) ExtendedConfig.instance().toggleSetting(s);
   }
 
-  private void showMessagePanelOptions () {
-    showSettings(new SettingsWrapBuilder(R.id.btn_hideMessageButtons).addHeaderItem(
-      new ListItem(ListItem.TYPE_INFO, R.id.text_title, 0, R.string.MessagePanelPreferences, false)).setRawItems(
-      new ListItem[] {
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableCameraButton, 0, R.string.DisableCameraButton, ExtendedConfig.disableCameraButton),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableCommandButton, 0, R.string.DisableCommandButton, ExtendedConfig.disableCommandButton),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableRecordButton, 0, R.string.DisableRecordButton, ExtendedConfig.disableRecordButton),
-        new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_disableSenderButton, 0, R.string.DisableSenderButton, ExtendedConfig.disableSenderButton)
-      }).setIntDelegate((id, result) -> {
-      if (ExtendedConfig.disableCameraButton == (result.get(R.id.btn_disableCameraButton) == 0)) {
-        ExtendedConfig.instance().toggleDisableCameraButton();
-      }
-      if (ExtendedConfig.disableCommandButton == (result.get(R.id.btn_disableCommandButton) == 0)) {
-        ExtendedConfig.instance().toggleDisableCommandButton();
-      }
-      if (ExtendedConfig.disableRecordButton == (result.get(R.id.btn_disableRecordButton) == 0)) {
-        ExtendedConfig.instance().toggleDisableRecordButton();
-      }
-      if (ExtendedConfig.disableSenderButton == (result.get(R.id.btn_disableSenderButton) == 0)) {
-        ExtendedConfig.instance().toggleDisableSenderButton();
-      }
-      adapter.updateValuedSettingById(R.id.btn_hideMessageButtons);
-    }));
+  private void showOptions(int optionType) {
+    Map<Integer, Setting> settingsMap;
+    int title = 0;
+    int wrapId = 0;
+    boolean shouldRestart = false;
+
+    if (optionType == OPTIONS_MESSAGE_PANEL) {
+      settingsMap = Map.of(
+        R.id.btn_disableCameraButton, DISABLE_CAMERA_BUTTON,
+        R.id.btn_disableCommandButton, DISABLE_COMMAND_BUTTON,
+        R.id.btn_disableRecordButton, DISABLE_RECORD_BUTTON,
+        R.id.btn_disableSenderButton, DISABLE_SENDER_BUTTON
+      );
+      title = R.string.MessagePanelPreferences;
+      wrapId = R.id.btn_hideMessageButtons;
+
+    } else if (optionType == OPTIONS_DRAWER) {
+      settingsMap = Map.of(
+        R.id.btn_contacts, DRAWER_HIDE_CONTACTS,
+        R.id.btn_calls, DRAWER_HIDE_CALLS,
+        R.id.btn_savedMessages, DRAWER_HIDE_FAVOURITE,
+        R.id.btn_invite, DRAWER_HIDE_INVITE,
+        R.id.btn_help, DRAWER_HIDE_HELP,
+        R.id.btn_night, DRAWER_HIDE_NIGHT
+      );
+      title = R.string.DrawerItems;
+      wrapId = R.id.btn_drawerItems;
+      shouldRestart = true;
+
+    } else {
+      return;
+    }
+
+    ListItem[] items = settingsMap.entrySet().stream()
+      .map(e -> new ListItem(ListItem.TYPE_CHECKBOX_OPTION, e.getKey(), 0, getLabel(e.getValue()), e.getValue().value))
+      .toArray(ListItem[]::new);
+
+    showSettings(new SettingsWrapBuilder(wrapId)
+      .addHeaderItem(new ListItem(ListItem.TYPE_INFO, R.id.text_title, 0, title, false))
+      .setRawItems(items)
+      .setIntDelegate((id, result) -> {
+        settingsMap.forEach((viewId, setting) -> {
+          if (setting.value == (result.get(viewId) == 0))
+            ExtendedConfig.instance().toggleSetting(setting);
+        });
+        adapter.updateValuedSettingById(wrapId);
+        if (shouldRestart) SystemUtils.restartApp(context());
+      }));
   }
 
-  @Override protected void onCreateView(Context context, CustomRecyclerView recyclerView) {
-  		adapter = new SettingsAdapter(this) {
-  			@Override protected void setValuedSetting(ListItem item, SettingView view, boolean isUpdate) {
-  				view.setDrawModifier(item.getDrawModifier());
-  				int itemId = item.getId();
-  				if (itemId == R.id.btn_channelLink) {
-  					view.setData("@tgx_extended");
-  				} else if (itemId == R.id.btn_githubLink) {
-  					view.setData("GitHub");
-  				} else if (itemId == R.id.btn_crowdinLink) {
-            view.setData(R.string.CrowdinDesc);
-          } else if (itemId == R.id.btn_donateLink) {
-            view.setData(R.string.DonateDesc);
-          } else if (itemId == R.id.btn_checkExtendedUpdates) {
-            // TODO: Dynamic string with last time checked.
-            view.setData("Already updated to latest version.");
-          } else if (itemId == R.id.btn_showUserId) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.showUserId, isUpdate);
-          } else if (itemId == R.id.btn_drawerBlur) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerBlur, isUpdate);
-          } else if (itemId == R.id.btn_drawerDarken) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerDarken, isUpdate);
-          } else if (itemId == R.id.btn_hidePhoneNumber) {
-            view.setData(R.string.HidePhoneNumberDesc);
-            view.getToggler().setRadioEnabled(ExtendedConfig.hidePhoneNumber, isUpdate);
-          } else if (itemId == R.id.btn_disableCameraButton) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.disableCameraButton, isUpdate);
-          } else if (itemId == R.id.btn_disableRecordButton) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.disableRecordButton, isUpdate);
-          } else if (itemId == R.id.btn_disableCommandButton) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.disableCommandButton, isUpdate);
-          } else if (itemId == R.id.btn_disableSenderButton) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.disableSenderButton, isUpdate);
-          } else if (itemId == R.id.btn_hideMessageButtons) {
-            view.setData(R.string.HideMessageButtonsDesc);
-          } else if (itemId == R.id.btn_drawerItems) {
-            view.setData(R.string.DrawerItemsDesc);
-          } else if (itemId == R.id.btn_contacts) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideContacts, isUpdate);
-          } else if (itemId == R.id.btn_calls) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideCalls, isUpdate);
-          } else if (itemId == R.id.btn_savedMessages) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideFavourite, isUpdate);
-          } else if (itemId == R.id.btn_invite) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideInvite, isUpdate);
-          } else if (itemId == R.id.btn_help) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideHelp, isUpdate);
-          } else if (itemId == R.id.btn_night) {
-            view.getToggler().setRadioEnabled(ExtendedConfig.drawerHideNight, isUpdate);
-          }
-        }
-      };
+  private static final Map<Setting, Integer> optionsLabels = Map.ofEntries(
+    Map.entry(DISABLE_CAMERA_BUTTON, R.string.DisableCameraButton),
+    Map.entry(DISABLE_COMMAND_BUTTON, R.string.DisableCommandButton),
+    Map.entry(DISABLE_RECORD_BUTTON, R.string.DisableRecordButton),
+    Map.entry(DISABLE_SENDER_BUTTON, R.string.DisableSenderButton),
+    Map.entry(DRAWER_HIDE_CONTACTS, R.string.Contacts),
+    Map.entry(DRAWER_HIDE_CALLS, R.string.Calls),
+    Map.entry(DRAWER_HIDE_FAVOURITE, R.string.SavedMessages),
+    Map.entry(DRAWER_HIDE_INVITE, R.string.InviteFriends),
+    Map.entry(DRAWER_HIDE_HELP, R.string.Help),
+    Map.entry(DRAWER_HIDE_NIGHT, R.string.NightMode)
+  );
 
-      ArrayList<ListItem> items = new ArrayList<>();
+  private int getLabel(Setting s) {
+    return optionsLabels.getOrDefault(s, 0);
+  }
 
-      items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
-      
-      if (mode == MODE_GENERAL) {
-        items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.ProfilePreferences));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-        items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_showUserId, 0, R.string.ShowUserId));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-      } else if (mode == MODE_INTERFACE) {
-        items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerPreferences));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-        items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerBlur, 0, R.string.DrawerBlur));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
-        items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerDarken, 0, R.string.DrawerDarken));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_drawerItems, 0, R.string.DrawerItems));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-      } else if (mode == MODE_CHATS) {
-        items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.MessagePanelPreferences));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_hideMessageButtons, 0, R.string.HideMessageButtons));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-      } else if (mode == MODE_MISC) {
-        // TODO: No features yet
-      } else {
-        items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.Settings));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_generalSettings, R.drawable.baseline_widgets_24, R.string.GeneralSettings));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_appearanceSettings, R.drawable.baseline_palette_24, R.string.AppearanceSettings));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_chatsSettings, R.drawable.baseline_chat_bubble_24, R.string.ChatsSettings));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_miscSettings, R.drawable.baseline_star_24, R.string.MiscSettings));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+  private void setToggle(SettingView view, ExtendedConfig.Setting s, boolean isUpdate) {
+    view.getToggler().setRadioEnabled(s.value, isUpdate);
+  }
 
-        items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.AboutExtended));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_channelLink, R.drawable.baseline_newspaper_24, R.string.TelegramChannel));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, R.drawable.baseline_github_24, R.string.GitHub));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, R.drawable.baseline_translate_24, R.string.Crowdin));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_donateLink, R.drawable.baseline_paid_24, R.string.Donate));
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-        items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_checkExtendedUpdates, R.drawable.baseline_update_24, R.string.OTACheck));
-        items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-        items.add(new ListItem(ListItem.TYPE_BUILD_NO, R.id.btn_build, 0, ExtendedConfig.BUILD));
+  @Override
+  protected void onCreateView(Context ctx, CustomRecyclerView recyclerView) {
+    adapter = new SettingsAdapter(this) {
+      @Override
+      protected void setValuedSetting(ListItem item, SettingView view, boolean isUpdate) {
+        int id = item.getId();
+        if (id == R.id.btn_channelLink) view.setData(R.string.ExtendedUsername);
+        else if (id == R.id.btn_githubLink) view.setData(R.string.GitHub);
+        else if (id == R.id.btn_crowdinLink) view.setData(R.string.CrowdinDesc);
+        else if (id == R.id.btn_donateLink) view.setData(R.string.DonateDesc);
+        else if (id == R.id.btn_showUserId) setToggle(view, SHOW_USER_ID.value, isUpdate);
+        else if (id == R.id.btn_drawerBlur) setToggle(view, DRAWER_BLUR.value, isUpdate);
+        else if (id == R.id.btn_drawerDarken) setToggle(view, DRAWER_DARKEN.value, isUpdate);
+        else if (id == R.id.btn_hidePhoneNumber) {
+          view.setData(R.string.HidePhoneNumberDesc);
+          setToggle(view, HIDE_PHONE_NUMBER.value, isUpdate);
+        } else if (id == R.id.btn_disableCameraButton) setToggle(view, DISABLE_CAMERA_BUTTON.value, isUpdate);
+        else if (id == R.id.btn_disableRecordButton) setToggle(view, DISABLE_RECORD_BUTTON.value, isUpdate);
+        else if (id == R.id.btn_disableCommandButton) setToggle(view, DISABLE_COMMAND_BUTTON.value, isUpdate);
+        else if (id == R.id.btn_disableSenderButton) setToggle(view, DISABLE_SENDER_BUTTON.value, isUpdate);
+        else if (id == R.id.btn_hideMessageButtons) view.setData(R.string.HideMessageButtonsDesc);
+        else if (id == R.id.btn_drawerItems) view.setData(R.string.DrawerItemsDesc);
+        else if (id == R.id.btn_contacts) setToggle(view, DRAWER_HIDE_CONTACTS.value, isUpdate);
+        else if (id == R.id.btn_calls) setToggle(view, DRAWER_HIDE_CALLS.value, isUpdate);
+        else if (id == R.id.btn_savedMessages) setToggle(view, DRAWER_HIDE_FAVOURITE.value, isUpdate);
+        else if (id == R.id.btn_invite) setToggle(view, DRAWER_HIDE_INVITE.value, isUpdate);
+        else if (id == R.id.btn_help) setToggle(view, DRAWER_HIDE_HELP.value, isUpdate);
+        else if (id == R.id.btn_night) setToggle(view, DRAWER_HIDE_NIGHT.value, isUpdate);
       }
+    };
 
-      adapter.setItems(items, true);
-      recyclerView.setAdapter(adapter);
+    ArrayList<ListItem> items = new ArrayList<>();
+    items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
 
+    if (mode == MODE_GENERAL) {
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.ProfilePreferences));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_showUserId, 0, R.string.ShowUserId));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+    } else if (mode == MODE_INTERFACE) {
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerPreferences));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerBlur, 0, R.string.DrawerBlur));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerDarken, 0, R.string.DrawerDarken));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_hidePhoneNumber, 0, R.string.HidePhoneNumber));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_drawerItems, 0, R.string.DrawerItems));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+    } else if (mode == MODE_CHATS) {
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.MessagePanelPreferences));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_hideMessageButtons, 0, R.string.HideMessageButtons));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+    } else if (mode == MODE_MISC) {
+      // TODO: misc
+    } else {
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.Settings));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_generalSettings, R.drawable.baseline_widgets_24, R.string.GeneralSettings));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_appearanceSettings, R.drawable.baseline_palette_24, R.string.AppearanceSettings));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_chatsSettings, R.drawable.baseline_chat_bubble_24, R.string.ChatsSettings));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_miscSettings, R.drawable.baseline_star_24, R.string.MiscSettings));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.AboutExtended));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_channelLink, R.drawable.baseline_newspaper_24, R.string.TelegramChannel));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, R.drawable.baseline_github_24, R.string.GitHub));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, R.drawable.baseline_translate_24, R.string.Crowdin));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_donateLink, R.drawable.baseline_paid_24, R.string.Donate));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_checkExtendedUpdates, R.drawable.baseline_update_24, R.string.OTACheck));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+      items.add(new ListItem(ListItem.TYPE_BUILD_NO, R.id.btn_build, 0, ExtendedConfig.BUILD));
+    }
+    adapter.setItems(items, true);
+    recyclerView.setAdapter(adapter);
   }
 }

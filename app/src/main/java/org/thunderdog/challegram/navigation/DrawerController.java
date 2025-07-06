@@ -260,18 +260,18 @@ public class DrawerController extends ViewController<Void> implements View.OnCli
       headerView.getExpanderView().setExpanded(true, false);
     }
 
-    if (!ExtendedConfig.drawerHideContacts) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_HIDE_CONTACTS)) {
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_contacts, R.drawable.baseline_perm_contact_calendar_24, R.string.Contacts));
     }
-    if (!ExtendedConfig.drawerHideCalls && Settings.instance().chatFoldersEnabled()) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_HIDE_CALLS) && Settings.instance().chatFoldersEnabled()) {
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_calls, R.drawable.baseline_call_24, R.string.Calls));
     }
-    if (!ExtendedConfig.drawerHideFavourite) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_HIDE_FAVOURITE)) {
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_savedMessages, R.drawable.baseline_bookmark_24, R.string.SavedMessages));
     }
     this.settingsClickBait = getSettingsClickBait();
     items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_settings, R.drawable.baseline_settings_24, R.string.Settings));
-    if (!ExtendedConfig.drawerHideInvite) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_HIDE_INVITE)) {
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_invite, R.drawable.baseline_person_add_24, R.string.InviteFriends));
     }
 
@@ -280,10 +280,10 @@ public class DrawerController extends ViewController<Void> implements View.OnCli
       proxyItem.setSelected(Settings.instance().getEffectiveProxyId() != Settings.PROXY_ID_NONE);
       items.add(proxyItem);
     }
-    if (!ExtendedConfig.drawerHideHelp) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_HIDE_HELP)) {
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_help, R.drawable.baseline_help_24, R.string.Help));
     }
-    if (!ExtendedConfig.drawerHideNight) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_HIDE_NIGHT)) {
       items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM_WITH_RADIO, R.id.btn_night, R.drawable.baseline_brightness_2_24, R.string.NightMode, R.id.btn_night, Theme.isDark()));
     }

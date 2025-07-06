@@ -145,8 +145,8 @@ public class SettingsController extends ViewController<Void> implements
   }
 
   @Override
-  public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
-    if (key.equals(ExtendedConfig.KEY_HIDE_PHONE_NUMBER)) {
+  public void onSettingsChanged(ExtendedConfig.Setting setting, boolean newVal, boolean oldVal) {
+    if (setting == ExtendedConfig.Setting.HIDE_PHONE_NUMBER) {
       this.contentView.setAdapter(adapter);
     }
   }
@@ -578,7 +578,7 @@ public class SettingsController extends ViewController<Void> implements
         } else if (itemId == R.id.btn_peer_id) {
           view.setData(Strings.buildCounter(tdlib.myUserId(true)));
         } else if (itemId == R.id.btn_phone) {
-          if (ExtendedConfig.hidePhoneNumber) {
+          if (ExtendedConfig.instance().get(ExtendedConfig.Setting.HIDE_PHONE_NUMBER)) {
             view.setData(R.string.PhoneNumberHidden);
           } else {
             view.setData(myPhone);
@@ -618,7 +618,7 @@ public class SettingsController extends ViewController<Void> implements
     }
     items.add(new ListItem(ListItem.TYPE_SEPARATOR));
     items.add(new ListItem(ListItem.TYPE_INFO_MULTILINE, R.id.btn_bio, R.drawable.baseline_info_24, R.string.UserBio).setContentStrings(R.string.LoadingInformation, R.string.BioNone));
-    if (ExtendedConfig.showUserId) {
+    if (ExtendedConfig.instance().get(ExtendedConfig.Setting.SHOW_USER_ID)) {
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
       items.add(new ListItem(ListItem.TYPE_INFO_SETTING, R.id.btn_userId, R.drawable.baseline_code_24, R.string.ChatId));
     }

@@ -583,15 +583,43 @@ public class MessagesController extends ViewController<MessagesController.Argume
   }
 
   @Override
-  public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
-    switch (key) {
-      case ExtendedConfig.KEY_DISABLE_CAM_BTN:
-      case ExtendedConfig.KEY_DISABLE_RCD_BTN:
-      case ExtendedConfig.KEY_DISABLE_CMD_BTN:
-      case ExtendedConfig.KEY_DISABLE_SNDR_BTN: {
-        updateView();
+  public void onSettingsChanged(ExtendedConfig.Setting setting, boolean newVal, boolean oldVal) {
+    switch (setting) {
+      case DISABLE_CAMERA_BUTTON:
+        if (cameraButton == null) return;
+        if (newVal) {
+          attachButtons.removeView(cameraButton);
+        } else {
+          attachButtons.addView(cameraButton);
+        }
         break;
-      }
+
+      case DISABLE_RECORD_BUTTON:
+        if (recordButton == null) return;
+        if (newVal) {
+          attachButtons.removeView(recordButton);
+        } else {
+          attachButtons.addView(recordButton);
+        }
+        break;
+
+      case DISABLE_COMMAND_BUTTON:
+        if (commandButton == null) return;
+        if (newVal) {
+          attachButtons.removeView(commandButton);
+        } else {
+          attachButtons.addView(commandButton);
+        }
+        break;
+
+      case DISABLE_SENDER_BUTTON:
+        if (messageSenderButton == null) return;
+        if (newVal) {
+          сontentView.removeView(messageSenderButton);
+        } else {
+          contentView.addView(messageSenderButton);
+        }
+        break;
     }
   }
 
@@ -1176,7 +1204,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
     addThemeInvalidateListener(recordButton);
     recordButton.setLayoutParams(lp);
 
-    if (!ExtendedConfig.disableCommandButton) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_COMMAND_BUTTON)) {
       attachButtons.addView(commandButton);
     }
     if (silentButton != null) {
@@ -1185,11 +1213,11 @@ public class MessagesController extends ViewController<MessagesController.Argume
     if (scheduleButton != null) {
       attachButtons.addView(scheduleButton);
     }
-    if (!ExtendedConfig.disableCameraButton && cameraButton != null) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_CAMERA_BUTTON) && cameraButton != null) {
       attachButtons.addView(cameraButton);
     }
     attachButtons.addView(mediaButton);
-    if (!ExtendedConfig.disableRecordButton) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_RECORD_BUTTON)) {
       attachButtons.addView(recordButton);
     }
     attachButtons.updatePivot();
@@ -1422,7 +1450,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
       contentView.addView(emojiButton);
       contentView.addView(attachButtons);
       contentView.addView(sendButton);
-      if (!ExtendedConfig.disableSenderButton) {
+      if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_SENDER_BUTTON)) {
         contentView.addView(messageSenderButton);
       }
 

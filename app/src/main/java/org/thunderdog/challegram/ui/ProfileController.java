@@ -2476,7 +2476,7 @@ public class ProfileController extends ViewController<ProfileController.Args> im
     }
 
     final ListItem userIdItem = newUserIdItem();
-    if (ExtendedConfig.showUserId && userIdItem != null) {
+    if (ExtendedConfig.instance().get(ExtendedConfig.Setting.SHOW_USER_ID) && userIdItem != null) {
       if (addedCount > 0) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       }
@@ -3088,7 +3088,7 @@ public class ProfileController extends ViewController<ProfileController.Args> im
     }
 
     final ListItem userIdItem = newUserIdItem();
-    if (ExtendedConfig.showUserId && userIdItem != null) {
+    if (ExtendedConfig.instance().get(ExtendedConfig.Setting.SHOW_USER_ID) && userIdItem != null) {
       if (addedCount > 0) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       }
@@ -3171,7 +3171,7 @@ public class ProfileController extends ViewController<ProfileController.Args> im
     }
 
     final ListItem userIdItem = newUserIdItem();
-    if (ExtendedConfig.showUserId && userIdItem != null) {
+    if (ExtendedConfig.instance().get(ExtendedConfig.Setting.SHOW_USER_ID) && userIdItem != null) {
       if (addedCount > 0) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       }

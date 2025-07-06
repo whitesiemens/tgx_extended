@@ -1,19 +1,13 @@
 package com.tgx.extended;
 
-import android.content.SharedPreferences;
 import android.os.SystemClock;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import org.drinkmore.Tracer;
 import org.thunderdog.challegram.Log;
 import org.thunderdog.challegram.tool.UI;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import me.vkryl.core.reference.ReferenceList;
 import me.vkryl.leveldb.LevelDB;
 
@@ -29,70 +23,82 @@ public class ExtendedConfig {
   public static final String BUILD_CODENAME = "Andromeda";
   public static final String BUILD = BUILD_VERSION + " " + BUILD_CODENAME;
 
-  public static final String KEY_SHOW_USER_ID = "show_user_id";
-  public static final String KEY_HIDE_PHONE_NUMBER = "hide_phone_number";
-  public static final String KEY_DISABLE_CAM_BTN = "disable_camera_button";
-  public static final String KEY_DISABLE_RCD_BTN = "disable_record_button";
-  public static final String KEY_DISABLE_CMD_BTN = "disable_command_button";
-  public static final String KEY_DISABLE_SNDR_BTN = "disable_sender_button";
-  public static final String KEY_DRAWER_HIDE_CONTACTS = "drawer_hide_contacts";
-  public static final String KEY_DRAWER_HIDE_CALLS = "drawer_hide_calls";
-  public static final String KEY_DRAWER_HIDE_FAVOURITE = "drawer_hide_favourite";
-  public static final String KEY_DRAWER_HIDE_INVITE = "drawer_hide_invite";
-  public static final String KEY_DRAWER_HIDE_HELP = "drawer_hide_help";
-  public static final String KEY_DRAWER_HIDE_NIGHT = "drawer_hide_night";
-  public static final String KEY_DRAWER_BLUR = "drawer_blur";
-  public static final String KEY_DRAWER_DARKEN = "drawer_darken";
+  public enum Setting {
+    SHOW_USER_ID("show_user_id", false, false),
+    DRAWER_BLUR("drawer_blur", false, true),
+    DRAWER_DARKEN("drawer_darken", false, false),
+    HIDE_PHONE_NUMBER("hide_phone_number", false, true),
+    DRAWER_HIDE_CONTACTS("drawer_hide_contacts", false, false),
+    DRAWER_HIDE_CALLS("drawer_hide_calls", false, false),
+    DRAWER_HIDE_FAVOURITE("drawer_hide_favourite", false, false),
+    DRAWER_HIDE_INVITE("drawer_hide_invite", false, false),
+    DRAWER_HIDE_HELP("drawer_hide_help", false, false),
+    DRAWER_HIDE_NIGHT("drawer_hide_night", false, false),
+    DISABLE_CAMERA_BUTTON("disable_camera_button", false, true),
+    DISABLE_RECORD_BUTTON("disable_record_button", false, true),
+    DISABLE_COMMAND_BUTTON("disable_command_button", false, true),
+    DISABLE_SENDER_BUTTON("disable_sender_button", false, true);
 
-  public static boolean showUserId = instance().getBoolean(KEY_SHOW_USER_ID, false);
-  public static boolean hidePhoneNumber = instance().getBoolean(KEY_HIDE_PHONE_NUMBER, false);
-  public static boolean disableCameraButton = instance().getBoolean(KEY_DISABLE_CAM_BTN, false);
-  public static boolean disableRecordButton = instance().getBoolean(KEY_DISABLE_RCD_BTN, false);
-  public static boolean disableCommandButton = instance().getBoolean(KEY_DISABLE_CMD_BTN, false);
-  public static boolean disableSenderButton = instance().getBoolean(KEY_DISABLE_SNDR_BTN, false);
-  public static boolean drawerHideContacts = instance().getBoolean(KEY_DRAWER_HIDE_CONTACTS, false);
-  public static boolean drawerHideCalls = instance().getBoolean(KEY_DRAWER_HIDE_CALLS, false);
-  public static boolean drawerHideFavourite = instance().getBoolean(KEY_DRAWER_HIDE_FAVOURITE, false);
-  public static boolean drawerHideInvite = instance().getBoolean(KEY_DRAWER_HIDE_INVITE, false);
-  public static boolean drawerHideHelp = instance().getBoolean(KEY_DRAWER_HIDE_HELP, false);
-  public static boolean drawerHideNight = instance().getBoolean(KEY_DRAWER_HIDE_NIGHT, false);
-  public static boolean drawerBlur = instance().getBoolean(KEY_DRAWER_BLUR, false);
-  public static boolean drawerDarken = instance().getBoolean(KEY_DRAWER_DARKEN, false);
+    public final String key;
+    public final boolean defaultValue;
+    public final boolean shouldNotify;
+    public boolean value;
 
-  private ExtendedConfig () {
+    Setting(String key, boolean defaultValue, boolean shouldNotify) {
+      this.key = key;
+      this.defaultValue = defaultValue;
+      this.shouldNotify = shouldNotify;
+    }
+  }
+
+  static {
+    ExtendedConfig cfg = instance();
+    for (Setting s : Setting.values()) {
+      if (!cfg.containsKey(s.key)) {
+        cfg.putBoolean(s.key, s.defaultValue);
+        s.value = s.defaultValue;
+      } else {
+        s.value = cfg.getBoolean(s.key, s.defaultValue);
+      }
+    }
+  }
+
+  private ExtendedConfig() {
     File configDir = new File(UI.getAppContext().getFilesDir(), "extended_config");
     if (!configDir.exists() && !configDir.mkdir()) {
       throw new IllegalStateException("Unable to create working directory");
     }
+
     long ms = SystemClock.uptimeMillis();
     config = new LevelDB(new File(configDir, "db").getPath(), true, new LevelDB.ErrorHandler() {
-      @Override public boolean onFatalError (LevelDB levelDB, Throwable error) {
+      @Override public boolean onFatalError(LevelDB db, Throwable error) {
         Tracer.onDatabaseError(error);
         return true;
       }
 
-      @Override public void onError (LevelDB levelDB, String message, @Nullable Throwable error) {
+      @Override public void onError(LevelDB db, String message, Throwable error) {
         android.util.Log.e(Log.LOG_TAG, message, error);
       }
     });
+
     int configVersion = 0;
     try {
       configVersion = Math.max(0, config.tryGetInt(KEY_VERSION));
-    } catch (FileNotFoundException ignored) {
-    }
+    } catch (FileNotFoundException ignored) {}
+
     if (configVersion > VERSION) {
       Log.e("Downgrading database version: %d -> %d", configVersion, VERSION);
       config.putInt(KEY_VERSION, VERSION);
     }
-    for (int version = configVersion + 1; version <= VERSION; version++) {
-      SharedPreferences.Editor editor = config.edit();
-      editor.putInt(KEY_VERSION, version);
-      editor.apply();
+
+    for (int v = configVersion + 1; v <= VERSION; v++) {
+      config.edit().putInt(KEY_VERSION, v).apply();
     }
+
     Log.i("Opened database in %dms", SystemClock.uptimeMillis() - ms);
   }
 
-  public static ExtendedConfig instance () {
+  public static ExtendedConfig instance() {
     if (instance == null) {
       synchronized (ExtendedConfig.class) {
         if (instance == null) {
@@ -104,162 +110,57 @@ public class ExtendedConfig {
     return instance;
   }
 
-  public LevelDB edit () {
-    return config.edit();
+  public void toggleSetting(Setting setting) {
+    boolean oldValue = setting.value;
+    boolean newValue = !oldValue;
+    setting.value = newValue;
+    putBoolean(setting.key, newValue);
+    if (setting.shouldNotify) {
+      notifyClientListeners(setting, newValue, oldValue);
+    }
   }
 
-  public void remove (String key) {
-    config.remove(key);
-  }
-
-  public void putLong (String key, long value) {
-    config.putLong(key, value);
-  }
-
-  public long getLong (String key, long defValue) {
-    return config.getLong(key, defValue);
-  }
-
-  public void putLongArray (String key, long[] value) {
-    config.putLongArray(key, value);
-  }
-
-  public long[] getLongArray (String key) {
-    return config.getLongArray(key);
-  }
-
-  public void putInt (String key, int value) {
-    config.putInt(key, value);
-  }
-
-  public int getInt (String key, int defValue) {
-    return config.getInt(key, defValue);
-  }
-
-  public void putFloat (String key, float value) {
-    config.putFloat(key, value);
-  }
-
-  public void getFloat (String key, float defValue) {
-    config.getFloat(key, defValue);
-  }
-
-  public void putBoolean (String key, boolean value) {
-    config.putBoolean(key, value);
-  }
-
-  public boolean getBoolean (String key, boolean defValue) {
-    return config.getBoolean(key, defValue);
-  }
-
-  public void putString (String key, @NonNull String value) {
-    config.putString(key, value);
-  }
-
-  public String getString (String key, String defValue) {
-    return config.getString(key, defValue);
-  }
-
-  public boolean containsKey (String key) {
-    return config.contains(key);
-  }
-
-  public LevelDB config () {
-    return config;
+  public boolean get(Setting setting) {
+    return setting.value;
   }
 
   public interface SettingsChangeListener {
-    void onSettingsChanged (String key, Object newSettings, Object oldSettings);
+    void onSettingsChanged(Setting setting, boolean newVal, boolean oldVal);
   }
 
-  private ReferenceList<SettingsChangeListener> settingsListeners;
+  private ReferenceList<SettingChangeListener> listeners;
 
-  public void addSettingsListener (SettingsChangeListener listener) {
-    if (settingsListeners == null)
-      settingsListeners = new ReferenceList<>();
-    settingsListeners.add(listener);
+  public void addSettingsListener(SettingChangeListener l) {
+    if (listeners == null) listeners = new ReferenceList<>();
+    listeners.add(l);
   }
 
-  public void removeSettingsListener (SettingsChangeListener listener) {
-    if (settingsListeners != null) {
-      settingsListeners.remove(listener);
+  public void removeSettingsListener(SettingChangeListener l) {
+    if (listeners != null) listeners.remove(l);
+  }
+
+  private void notifyClientListeners(Setting setting, boolean newVal, boolean oldVal) {
+    if (listeners != null) {
+      for (SettingsChangeListener l : listeners)
+        l.onSettingsChanged(setting, newVal, oldVal);
     }
   }
 
-  private void notifyClientListeners (String key, Object newSettings, Object oldSettings) {
-    if (settingsListeners != null) {
-      for (SettingsChangeListener listener : settingsListeners) {
-        listener.onSettingsChanged(key, newSettings, oldSettings);
-      }
-    }
-  }
+  public LevelDB edit() { return config.edit(); }
+  public void remove(String key) { config.remove(key); }
+  public void putLong(String key, long value) { config.putLong(key, value); }
+  public long getLong(String key, long def) { return config.getLong(key, def); }
+  public void putLongArray(String key, long[] value) { config.putLongArray(key, value); }
+  public long[] getLongArray(String key) { return config.getLongArray(key); }
+  public void putInt(String key, int value) { config.putInt(key, value); }
+  public int getInt(String key, int def) { return config.getInt(key, def); }
+  public void putFloat(String key, float value) { config.putFloat(key, value); }
+  public void getFloat(String key, float def) { config.getFloat(key, def); }
+  public void putBoolean(String key, boolean value) { config.putBoolean(key, value); }
+  public boolean getBoolean(String key, boolean def) { return config.getBoolean(key, def); }
+  public void putString(String key, @NonNull String value) { config.putString(key, value); }
+  public String getString(String key, String def) { return config.getString(key, def); }
+  public boolean containsKey(String key) { return config.contains(key); }
+  public LevelDB config() { return config; }
 
-  public void toggleShowUserId () {
-    putBoolean(KEY_SHOW_USER_ID, showUserId ^= true);
-  }
-
-  public void toggleHidePhoneNumber () {
-    putBoolean(KEY_HIDE_PHONE_NUMBER, hidePhoneNumber ^= true);
-    notifyClientListeners(KEY_HIDE_PHONE_NUMBER, !hidePhoneNumber, hidePhoneNumber);
-  }
-
-  public void toggleDisableCameraButton () {
-    putBoolean(KEY_DISABLE_CAM_BTN, disableCameraButton ^= true);
-    notifyClientListeners(KEY_DISABLE_CAM_BTN, !disableCameraButton, disableCameraButton);
-  }
-
-  public void toggleDisableRecordButton () {
-    putBoolean(KEY_DISABLE_RCD_BTN, disableRecordButton ^= true);
-    notifyClientListeners(KEY_DISABLE_RCD_BTN, !disableRecordButton, disableRecordButton);
-  }
-
-  public void toggleDisableCommandButton () {
-    putBoolean(KEY_DISABLE_CMD_BTN, disableCommandButton ^= true);
-    notifyClientListeners(KEY_DISABLE_CMD_BTN, !disableCommandButton, disableCommandButton);
-  }
-
-  public void toggleDisableSenderButton () {
-    putBoolean(KEY_DISABLE_SNDR_BTN, disableSenderButton ^= true);
-    notifyClientListeners(KEY_DISABLE_SNDR_BTN, !disableSenderButton, disableSenderButton);
-  }
-
-  public void toggleDrawerHideContacts () {
-    putBoolean(KEY_DRAWER_HIDE_CONTACTS, drawerHideContacts ^= true);
-    notifyClientListeners(KEY_DRAWER_HIDE_CONTACTS, !drawerHideContacts, drawerHideContacts);
-  }
-
-  public void toggleDrawerHideCalls () {
-    putBoolean(KEY_DRAWER_HIDE_CALLS, drawerHideCalls ^= true);
-    notifyClientListeners(KEY_DRAWER_HIDE_CALLS, !drawerHideCalls, drawerHideCalls);
-  }
-
-  public void toggleDrawerHideFavourite () {
-    putBoolean(KEY_DRAWER_HIDE_FAVOURITE, drawerHideFavourite ^= true);
-    notifyClientListeners(KEY_DRAWER_HIDE_FAVOURITE, !drawerHideFavourite, drawerHideFavourite);
-  }
-
-  public void toggleDrawerHideInvite () {
-    putBoolean(KEY_DRAWER_HIDE_INVITE, drawerHideInvite ^= true);
-    notifyClientListeners(KEY_DRAWER_HIDE_INVITE, !drawerHideInvite, drawerHideInvite);
-  }
-
-  public void toggleDrawerHideHelp () {
-    putBoolean(KEY_DRAWER_HIDE_HELP, drawerHideHelp ^= true);
-    notifyClientListeners(KEY_DRAWER_HIDE_HELP, !drawerHideHelp, drawerHideHelp);
-  }
-
-  public void toggleDrawerHideNight () {
-    putBoolean(KEY_DRAWER_HIDE_NIGHT, drawerHideNight ^= true);
-    notifyClientListeners(KEY_DRAWER_HIDE_NIGHT, !drawerHideNight, drawerHideNight);
-  }
-
-  public void toggleDrawerBlur () {
-    putBoolean(KEY_DRAWER_BLUR, drawerBlur ^= true);
-    notifyClientListeners(KEY_DRAWER_BLUR, !drawerBlur, drawerBlur);
-  }
-
-  public void toggleDrawerDarken () {
-    putBoolean(KEY_DRAWER_DARKEN, drawerDarken ^= true);
-    notifyClientListeners(KEY_DRAWER_DARKEN, !drawerDarken, drawerDarken);
-  }
 }

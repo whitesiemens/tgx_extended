@@ -195,8 +195,8 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
   }
 
   @Override
-  public void onSettingsChanged (String key, Object newSettings, Object oldSettings) {
-    if (key.equals(ExtendedConfig.KEY_HIDE_PHONE_NUMBER) || key.equals(ExtendedConfig.KEY_DRAWER_BLUR)) {
+  public void onSettingsChanged(ExtendedConfig.Setting setting, boolean newVal, boolean oldVal) {
+    if (setting == ExtendedConfig.Setting.HIDE_PHONE_NUMBER || setting == ExtendedConfig.Setting.DRAWER_BLUR) {
       setUser(currentAccount);
     }
   }
@@ -310,7 +310,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
         avatarFull = bigFile;
         avatarFull.setScaleType(ImageFile.CENTER_CROP);
         int drawerWidth = context.parent.getWidth();
-        if (ExtendedConfig.drawerBlur) {
+        if (ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_BLUR)) {
           avatarFull.setSize(160);
           avatarFull.setNeedBlur();
         } else if (drawerWidth < 512) {
@@ -334,9 +334,9 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
       if (account.hasUserInfo()) {
         name = account.getName();
         username = account.getUsername();
-        if (ExtendedConfig.hidePhoneNumber && username != null) {
+        if (ExtendedConfig.instance().get(ExtendedConfig.Setting.HIDE_PHONE_NUMBER) && username != null) {
           phone = "@" + username;
-        } else if (ExtendedConfig.hidePhoneNumber && username == null) {
+        } else if (ExtendedConfig.instance().get(ExtendedConfig.Setting.HIDE_PHONE_NUMBER) && username == null) {
           phone = String.valueOf(userId);
         } else {
           phone = Strings.formatPhone(account.getPhoneNumber());
@@ -433,7 +433,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
             receiver.setRadius(cornerRadius);
             receiver.draw(c);
             receiver.restorePaintAlpha();
-            if (ExtendedConfig.drawerDarken) {
+            if (ExtendedConfig.instance().get(ExtendedConfig.Setting.DRAWER_DARKEN)) {
               RectF rectF = Paints.getRectF();
               rectF.set(left, top, right, bottom);
               c.drawRoundRect(rectF, cornerRadius, cornerRadius, Paints.fillingPaint(ColorUtils.alphaColor(45, 0x1a000000)));

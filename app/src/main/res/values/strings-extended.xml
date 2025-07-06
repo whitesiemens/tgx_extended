@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<string name="ExtendedUsername">@tgx_extended</string>
 	<string name="ExtendedChannelLink">https://t.me/tgx_extended</string>
+	<string name="GitHub">GitHub</string>
 	<string name="GithubLink">https://github.com/whitesiemens/tgx_extended</string>
 	<string name="CrowdinLink"></string>
 	<string name="DonateLink"></string>
