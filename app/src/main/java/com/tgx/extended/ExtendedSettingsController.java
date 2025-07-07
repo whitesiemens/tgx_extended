@@ -183,25 +183,25 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         else if (id == R.id.btn_githubLink) view.setData(R.string.GitHub);
         else if (id == R.id.btn_crowdinLink) view.setData(R.string.CrowdinDesc);
         else if (id == R.id.btn_donateLink) view.setData(R.string.DonateDesc);
-        else if (id == R.id.btn_showUserId) setToggle(view, SHOW_USER_ID.value, isUpdate);
-        else if (id == R.id.btn_drawerBlur) setToggle(view, DRAWER_BLUR.value, isUpdate);
-        else if (id == R.id.btn_drawerDarken) setToggle(view, DRAWER_DARKEN.value, isUpdate);
+        else if (id == R.id.btn_showUserId) setToggle(view, SHOW_USER_ID, isUpdate);
+        else if (id == R.id.btn_drawerBlur) setToggle(view, DRAWER_BLUR, isUpdate);
+        else if (id == R.id.btn_drawerDarken) setToggle(view, DRAWER_DARKEN, isUpdate);
         else if (id == R.id.btn_hidePhoneNumber) {
           view.setData(R.string.HidePhoneNumberDesc);
-          setToggle(view, HIDE_PHONE_NUMBER.value, isUpdate);
-        } else if (id == R.id.btn_disableCameraButton) setToggle(view, DISABLE_CAMERA_BUTTON.value, isUpdate);
-        else if (id == R.id.btn_disableRecordButton) setToggle(view, DISABLE_RECORD_BUTTON.value, isUpdate);
-        else if (id == R.id.btn_disableCommandButton) setToggle(view, DISABLE_COMMAND_BUTTON.value, isUpdate);
-        else if (id == R.id.btn_disableSenderButton) setToggle(view, DISABLE_SENDER_BUTTON.value, isUpdate);
+          setToggle(view, HIDE_PHONE_NUMBER, isUpdate);
+        } else if (id == R.id.btn_disableCameraButton) setToggle(view, DISABLE_CAMERA_BUTTON, isUpdate);
+        else if (id == R.id.btn_disableRecordButton) setToggle(view, DISABLE_RECORD_BUTTON, isUpdate);
+        else if (id == R.id.btn_disableCommandButton) setToggle(view, DISABLE_COMMAND_BUTTON, isUpdate);
+        else if (id == R.id.btn_disableSenderButton) setToggle(view, DISABLE_SENDER_BUTTON, isUpdate);
         else if (id == R.id.btn_hideMessageButtons) view.setData(R.string.HideMessageButtonsDesc);
         else if (id == R.id.btn_drawerItems) view.setData(R.string.DrawerItemsDesc);
-        else if (id == R.id.btn_contacts) setToggle(view, DRAWER_HIDE_CONTACTS.value, isUpdate);
-        else if (id == R.id.btn_calls) setToggle(view, DRAWER_HIDE_CALLS.value, isUpdate);
-        else if (id == R.id.btn_savedMessages) setToggle(view, DRAWER_HIDE_FAVOURITE.value, isUpdate);
-        else if (id == R.id.btn_invite) setToggle(view, DRAWER_HIDE_INVITE.value, isUpdate);
-        else if (id == R.id.btn_help) setToggle(view, DRAWER_HIDE_HELP.value, isUpdate);
-        else if (id == R.id.btn_night) setToggle(view, DRAWER_HIDE_NIGHT.value, isUpdate);
-        else if (id == R.id.btn_disableReactions) setToggle(view, DISABLE_REACTIONS.value, isUpdate);
+        else if (id == R.id.btn_contacts) setToggle(view, DRAWER_HIDE_CONTACTS, isUpdate);
+        else if (id == R.id.btn_calls) setToggle(view, DRAWER_HIDE_CALLS, isUpdate);
+        else if (id == R.id.btn_savedMessages) setToggle(view, DRAWER_HIDE_FAVOURITE, isUpdate);
+        else if (id == R.id.btn_invite) setToggle(view, DRAWER_HIDE_INVITE, isUpdate);
+        else if (id == R.id.btn_help) setToggle(view, DRAWER_HIDE_HELP, isUpdate);
+        else if (id == R.id.btn_night) setToggle(view, DRAWER_HIDE_NIGHT, isUpdate);
+        else if (id == R.id.btn_disableReactions) setToggle(view, DISABLE_REACTIONS, isUpdate);
       }
     };
 
