@@ -92,7 +92,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     R.id.btn_drawerBlur, DRAWER_BLUR,
     R.id.btn_drawerDarken, DRAWER_DARKEN,
     R.id.btn_showUserId, SHOW_USER_ID,
-    R.id.btn_hidePhoneNumber, HIDE_PHONE_NUMBER
+    R.id.btn_hidePhoneNumber, HIDE_PHONE_NUMBER,
+    R.id.btn_disableReactions, DISABLE_REACTIONS
   );
 
   private void toggleSettingByViewId(int id) {
@@ -199,6 +200,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         else if (id == R.id.btn_invite) setToggle(view, DRAWER_HIDE_INVITE.value, isUpdate);
         else if (id == R.id.btn_help) setToggle(view, DRAWER_HIDE_HELP.value, isUpdate);
         else if (id == R.id.btn_night) setToggle(view, DRAWER_HIDE_NIGHT.value, isUpdate);
+        else if (id == R.id.btn_disableReactions) setToggle(view, DISABLE_REACTIONS.value, isUpdate);
       }
     };
 
@@ -225,6 +227,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.MessagePanelPreferences));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
       items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_hideMessageButtons, 0, R.string.HideMessageButtons));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_disableReactions, 0, R.string.DisableReactions));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
     } else if (mode == MODE_MISC) {
       // TODO: misc

@@ -168,6 +168,8 @@ import tgx.td.Td;
 import tgx.td.TdExt;
 import tgx.td.data.MessageWithProperties;
 
+import com.tgx.extended.ExtendedConfig;
+
 public abstract class TGMessage implements InvalidateContentProvider, TdlibDelegate, FactorAnimator.Target, Comparable<TGMessage>, Counter.Callback, TGAvatars.Callback, TranslationsManager.Translatable {
   private static final int MAXIMUM_CHANNEL_MERGE_TIME_DIFF = 150;
   private static final int MAXIMUM_COMMON_MERGE_TIME_DIFF = 900;
@@ -314,6 +316,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
   public static final int REACTIONS_DRAW_MODE_BUBBLE = 0;
   public static final int REACTIONS_DRAW_MODE_FLAT = 1;
   public static final int REACTIONS_DRAW_MODE_ONLY_ICON = 2;
+  public static final int REACTIONS_DRAW_MODE_NONE = 3;
 
   private final TranslationsManager mTranslationsManager;
 
@@ -5141,7 +5144,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
   }
 
   public boolean canBeReacted () {
-    return !isSponsoredMessage() && !isEventLog() && !Td.isEmpty(messageAvailableReactions) && (tdlib.hasPremium() || Td.hasNonPremiumReactions(messageAvailableReactions));
+    return !isSponsoredMessage() && !isEventLog() && !Td.isEmpty(messageAvailableReactions) && (tdlib.hasPremium() || Td.hasNonPremiumReactions(messageAvailableReactions)) && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
   }
 
   public boolean canBeSaved () {
@@ -5211,7 +5214,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
       }
       result = true;
     }
-    if (containsUnreadReactions() && !BitwiseUtils.hasFlag(flags, FLAG_IGNORE_REACTIONS_VIEW)) {
+    if (containsUnreadReactions() && !BitwiseUtils.hasFlag(flags, FLAG_IGNORE_REACTIONS_VIEW) && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS)) {
       flags |= FLAG_IGNORE_REACTIONS_VIEW;
 
       highlightUnreadReactions();
@@ -8486,7 +8489,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
   }
 
   public final boolean useReactionBubbles () {
-    return manager().useReactionBubbles() || forceReactionBubbles();
+    return manager().useReactionBubbles() || forceReactionBubbles() || !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
   }
 
   protected final boolean forceReactionBubbles () {
@@ -8944,6 +8947,9 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
   }
 
   private int getReactionsDrawMode () {
+    if (ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS)) {
+      return REACTIONS_DRAW_MODE_NONE;
+    }
     if (useReactionBubbles()) {
       return REACTIONS_DRAW_MODE_BUBBLE;
     }

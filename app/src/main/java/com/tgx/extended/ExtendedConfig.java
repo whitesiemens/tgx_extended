@@ -34,6 +34,7 @@ public class ExtendedConfig {
     DRAWER_HIDE_INVITE("drawer_hide_invite", false, false),
     DRAWER_HIDE_HELP("drawer_hide_help", false, false),
     DRAWER_HIDE_NIGHT("drawer_hide_night", false, false),
+    DISABLE_REACTIONS("disable_reactions", false, false),
     DISABLE_CAMERA_BUTTON("disable_camera_button", false, true),
     DISABLE_RECORD_BUTTON("disable_record_button", false, true),
     DISABLE_COMMAND_BUTTON("disable_command_button", false, true),

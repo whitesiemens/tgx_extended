@@ -37,6 +37,7 @@
 	<string name="PhoneNumberHidden">Phone number hidden</string>
 
 	<string name="MessagePanelPreferences">Message panel</string>
+	<string name="DisableReactions">Hide reactions</string>
 	<string name="HideMessageButtons">Hide message panel buttons</string>
 	<string name="HideMessageButtonsDesc">Hide useless attach buttons from message panel.</string>
 	<string name="DisableCameraButton">Camera</string>

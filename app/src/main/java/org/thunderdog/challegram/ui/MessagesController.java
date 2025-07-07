@@ -6244,7 +6244,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
   }
 
   private void setReactionCountBadge (int reactionCount) {
-    if (reactionCount > 0 && (inPreviewMode || isInForceTouchMode() || areScheduledOnly())) {
+    if (reactionCount > 0 && (inPreviewMode || isInForceTouchMode() || areScheduledOnly() || ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS))) {
       return;
     }
     if (reactionCountBadge != reactionCount) {

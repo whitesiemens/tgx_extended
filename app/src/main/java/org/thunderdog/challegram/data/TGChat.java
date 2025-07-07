@@ -77,6 +77,8 @@ import tgx.td.ChatPosition;
 import tgx.td.Td;
 import tgx.td.TdExt;
 
+import com.tgx.extended.ExtendedConfig;
+
 public class TGChat implements TdlibStatusManager.HelperTarget, ContentPreview.RefreshCallback, Counter.Callback, ReactionLoadListener, Destroyable, TdlibUi.MessageProvider {
   private static final int FLAG_HAS_PREFIX = 1;
   private static final int FLAG_TEXT_DRAFT = 1 << 4;
@@ -804,7 +806,7 @@ public class TGChat implements TdlibStatusManager.HelperTarget, ContentPreview.R
   }
 
   private void setCounter (boolean allowAnimation) {
-    boolean hasReactions = hasUnreadReactions();
+    boolean hasReactions = hasUnreadReactions() && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
     boolean hasMentions = hasUnreadMentions();
     int unreadCount = getUnreadCount();
 
@@ -970,7 +972,7 @@ public class TGChat implements TdlibStatusManager.HelperTarget, ContentPreview.R
   }
 
   public boolean needDrawReactionsPreview () {
-    return isPrivate() && !isSelfChat() && !showDraft();
+    return isPrivate() && !isSelfChat() && !showDraft() && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
   }
 
   public @Nullable EmojiStatusHelper.EmojiStatusDrawable getEmojiStatus () {
