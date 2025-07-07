@@ -103,10 +103,10 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
   }
 
   private void showOptions(int optionType) {
-    Map<Integer, Setting> settingsMap;
-    int title = 0;
-    int wrapId = 0;
-    boolean shouldRestart = false;
+    final Map<Integer, Setting> settingsMap;
+    final int title;
+    final int wrapId;
+    final boolean shouldRestart;
 
     if (optionType == OPTIONS_MESSAGE_PANEL) {
       settingsMap = Map.of(
@@ -115,6 +115,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         R.id.btn_disableRecordButton, DISABLE_RECORD_BUTTON,
         R.id.btn_disableSenderButton, DISABLE_SENDER_BUTTON
       );
+      shouldRestart = false;
       title = R.string.MessagePanelPreferences;
       wrapId = R.id.btn_hideMessageButtons;
 
