@@ -806,7 +806,7 @@ public class TGChat implements TdlibStatusManager.HelperTarget, ContentPreview.R
   }
 
   private void setCounter (boolean allowAnimation) {
-    boolean hasReactions = hasUnreadReactions() && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
+    boolean hasReactions = hasUnreadReactions() && !ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_REACTIONS);
     boolean hasMentions = hasUnreadMentions();
     int unreadCount = getUnreadCount();
 
@@ -972,7 +972,7 @@ public class TGChat implements TdlibStatusManager.HelperTarget, ContentPreview.R
   }
 
   public boolean needDrawReactionsPreview () {
-    return isPrivate() && !isSelfChat() && !showDraft() && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
+    return isPrivate() && !isSelfChat() && !showDraft() && !ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_REACTIONS);
   }
 
   public @Nullable EmojiStatusHelper.EmojiStatusDrawable getEmojiStatus () {

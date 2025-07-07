@@ -129,14 +129,14 @@ public class ExtendedConfig {
     void onSettingsChanged(Setting setting, boolean newVal, boolean oldVal);
   }
 
-  private ReferenceList<SettingChangeListener> listeners;
+  private ReferenceList<SettingsChangeListener> listeners;
 
-  public void addSettingsListener(SettingChangeListener l) {
+  public void addSettingsListener(SettingsChangeListener l) {
     if (listeners == null) listeners = new ReferenceList<>();
     listeners.add(l);
   }
 
-  public void removeSettingsListener(SettingChangeListener l) {
+  public void removeSettingsListener(SettingsChangeListener l) {
     if (listeners != null) listeners.remove(l);
   }
 

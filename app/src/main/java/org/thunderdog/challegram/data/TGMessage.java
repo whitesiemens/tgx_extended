@@ -5144,7 +5144,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
   }
 
   public boolean canBeReacted () {
-    return !isSponsoredMessage() && !isEventLog() && !Td.isEmpty(messageAvailableReactions) && (tdlib.hasPremium() || Td.hasNonPremiumReactions(messageAvailableReactions)) && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
+    return !isSponsoredMessage() && !isEventLog() && !Td.isEmpty(messageAvailableReactions) && (tdlib.hasPremium() || Td.hasNonPremiumReactions(messageAvailableReactions)) && !ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_REACTIONS);
   }
 
   public boolean canBeSaved () {
@@ -5214,7 +5214,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
       }
       result = true;
     }
-    if (containsUnreadReactions() && !BitwiseUtils.hasFlag(flags, FLAG_IGNORE_REACTIONS_VIEW) && !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS)) {
+    if (containsUnreadReactions() && !BitwiseUtils.hasFlag(flags, FLAG_IGNORE_REACTIONS_VIEW) && !ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_REACTIONS)) {
       flags |= FLAG_IGNORE_REACTIONS_VIEW;
 
       highlightUnreadReactions();
@@ -8489,7 +8489,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
   }
 
   public final boolean useReactionBubbles () {
-    return manager().useReactionBubbles() || forceReactionBubbles() || !ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS);
+    return manager().useReactionBubbles() || forceReactionBubbles() || !ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_REACTIONS);
   }
 
   protected final boolean forceReactionBubbles () {
@@ -8947,7 +8947,7 @@ public abstract class TGMessage implements InvalidateContentProvider, TdlibDeleg
   }
 
   private int getReactionsDrawMode () {
-    if (ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS)) {
+    if (ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_REACTIONS)) {
       return REACTIONS_DRAW_MODE_NONE;
     }
     if (useReactionBubbles()) {

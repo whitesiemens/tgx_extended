@@ -615,9 +615,9 @@ public class MessagesController extends ViewController<MessagesController.Argume
       case DISABLE_SENDER_BUTTON:
         if (messageSenderButton == null) return;
         if (newVal) {
-          сontentView.removeView(messageSenderButton);
+          this.сontentView.removeView(messageSenderButton);
         } else {
-          contentView.addView(messageSenderButton);
+          this.contentView.addView(messageSenderButton);
         }
         break;
     }
@@ -6244,7 +6244,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
   }
 
   private void setReactionCountBadge (int reactionCount) {
-    if (reactionCount > 0 && (inPreviewMode || isInForceTouchMode() || areScheduledOnly() || ExtendedConfig.get(ExtendedConfig.Setting.DISABLE_REACTIONS))) {
+    if (reactionCount > 0 && (inPreviewMode || isInForceTouchMode() || areScheduledOnly() || ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_REACTIONS))) {
       return;
     }
     if (reactionCountBadge != reactionCount) {
