@@ -615,9 +615,9 @@ public class MessagesController extends ViewController<MessagesController.Argume
       case DISABLE_SENDER_BUTTON:
         if (messageSenderButton == null) return;
         if (newVal) {
-          this.сontentView.removeView(messageSenderButton);
+          contentView.removeView(messageSenderButton);
         } else {
-          this.contentView.addView(messageSenderButton);
+          contentView.addView(messageSenderButton);
         }
         break;
     }
