@@ -50,4 +50,12 @@
 	<string name="DrawerItems">Hide drawer items</string>
 	<string name="DrawerItemsDesc">Hide useless elements of the drawer.</string>
 
+	<sting name="UnstablePreferences">Unstable settings</sting>
+	
+	<string name="ChangePhotoSize">Change the resolution of sent photos</string>
+	<string name="ChangePhotoSizeDesc">Caution: This function is unstable and may cause visual problems. Select the default value (1280px) and clear the data via the storage menu if you observe critical errors related to sending photos</string>
+	<string name="px800">800px</string>
+	<string name="px1280">1280px</string>
+	<string name="px2560">2560px</string>
+
 </resources>

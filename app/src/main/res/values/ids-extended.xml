@@ -33,4 +33,9 @@
     <item type="id" name="btn_drawerBlur" />
     <item type="id" name="btn_drawerDarken" />
     <item type="id" name="btn_drawerItems" />
+
+    <item type="id" name="btn_photoSize" />
+    <item type="id" name="btn_800px" />
+    <item type="id" name="btn_1280px" />
+    <item type="id" name="btn_2560px" />
 </resources>

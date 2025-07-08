@@ -39,8 +39,10 @@ import java.io.InputStream;
 import me.vkryl.core.MathUtils;
 import me.vkryl.core.StringUtils;
 
+import com.tgx.extended.ExtendedConfig;
+
 public class PhotoGenerationInfo extends GenerationInfo {
-  public static final int SIZE_LIMIT = 1280;
+  public static final int SIZE_LIMIT = setPhotoSizeLimit();
 
   private int rotation; // 0, 90, 180 or 270
   private boolean isFiltered;
@@ -460,5 +462,12 @@ public class PhotoGenerationInfo extends GenerationInfo {
     }
 
     return b.toString();
+  }
+
+  public static int setPhotoSizeLimit() {
+    if (ExtendedConfig.instance().get(ExtendedConfig.Setting.Q800PX)) return 800;
+    else if (ExtendedConfig.instance().get(ExtendedConfig.Setting.Q1280PX)) return 1280;
+    else if (ExtendedConfig.instance().get(ExtendedConfig.Setting.Q2560PX)) return 2560;
+    throw new IllegalStateException("No photo size selected");
   }
 }

@@ -29,7 +29,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
   private int mode;
 
   public static final int MODE_GENERAL = 1, MODE_INTERFACE = 2, MODE_CHATS = 3, MODE_MISC = 4;
-  public static final int OPTIONS_MESSAGE_PANEL = 1, OPTIONS_DRAWER = 2;
+  public static final int OPTIONS_MESSAGE_PANEL = 1, OPTIONS_DRAWER = 2, OPTIONS_PICSIZE = 3;
 
   public ExtendedSettingsController(Context ctx, Tdlib tdlib) {
     super(ctx, tdlib);
@@ -83,6 +83,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       showOptions(OPTIONS_MESSAGE_PANEL, ListItem.TYPE_CHECKBOX_OPTION);
     } else if (id == R.id.btn_drawerItems) {
       showOptions(OPTIONS_DRAWER, ListItem.TYPE_CHECKBOX_OPTION);
+    } else if (id == R.id.btn_photoSize) {
+      showOptions(OPTIONS_PICSIZE, ListItem.TYPE_RADIO_OPTION);
     } else {
       toggleSettingByViewId(id);
       adapter.updateValuedSettingById(id);
@@ -131,6 +133,16 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       title = R.string.DrawerItems;
       wrapId = R.id.btn_drawerItems;
       shouldRestart = true;
+
+    } else if (optionType == OPTIONS_PICSIZE) {
+      settingsMap = Map.of(
+        R.id.btn_800px, Q800PX,
+        R.id.btn_1280px, Q1280PX,
+        R.id.btn_2560px, Q2560PX
+      );
+      shouldRestart = false;
+      title = R.string.ChangePhotoSize;
+      wrapId = R.id.btn_photoSize;
     }
 
     ListItem[] items = settingsMap.entrySet().stream()
@@ -166,7 +178,10 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     Map.entry(DRAWER_HIDE_FAVOURITE, R.string.SavedMessages),
     Map.entry(DRAWER_HIDE_INVITE, R.string.InviteFriends),
     Map.entry(DRAWER_HIDE_HELP, R.string.Help),
-    Map.entry(DRAWER_HIDE_NIGHT, R.string.NightMode)
+    Map.entry(DRAWER_HIDE_NIGHT, R.string.NightMode),
+    Map.entry(Q800PX, R.string.px800),
+    Map.entry(Q1280PX, R.string.px1280),
+    Map.entry(Q2560PX, R.string.px2560)
   );
 
   private int getLabel(Setting s) {
@@ -205,6 +220,14 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         else if (id == R.id.btn_invite) setToggle(view, DRAWER_HIDE_INVITE, isUpdate);
         else if (id == R.id.btn_help) setToggle(view, DRAWER_HIDE_HELP, isUpdate);
         else if (id == R.id.btn_night) setToggle(view, DRAWER_HIDE_NIGHT, isUpdate);
+        else if (id == R.id.btn_photoSize) {
+          if (ExtendedConfig.instance().get(ExtendedConfig.Setting.Q800PX)) view.setData(R.string.px800);
+          else if (ExtendedConfig.instance().get(ExtendedConfig.Setting.Q1280PX)) view.setData(R.string.px1280);
+          else if (ExtendedConfig.instance().get(ExtendedConfig.Setting.Q2560PX)) view.setData(R.string.px2560);
+        }
+        else if (id == R.id.btn_800px) setToggle(view, Q800PX, isUpdate);
+        else if (id == R.id.btn_1280px) setToggle(view, Q1280PX, isUpdate);
+        else if (id == R.id.btn_2560px) setToggle(view, Q2560PX, isUpdate);
         else if (id == R.id.btn_disableReactions) setToggle(view, DISABLE_REACTIONS, isUpdate);
       }
     };
@@ -236,7 +259,11 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_disableReactions, 0, R.string.DisableReactions));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
     } else if (mode == MODE_MISC) {
-      // TODO: misc
+      items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.UnstablePreferences));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_photoSize, 0, R.string.ChangePhotoSize));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+      items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.ChangePhotoSizeDesc));
     } else {
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.Settings));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
