@@ -80,9 +80,9 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     } else if (id == R.id.btn_donateLink) {
       tdlib.ui().openUrl(this, Lang.getString(R.string.DonateLink), new TdlibUi.UrlOpenParameters());
     } else if (id == R.id.btn_hideMessageButtons) {
-      showOptions(OPTIONS_MESSAGE_PANEL);
+      showOptions(OPTIONS_MESSAGE_PANEL, ListItem.TYPE_CHECKBOX_OPTION);
     } else if (id == R.id.btn_drawerItems) {
-      showOptions(OPTIONS_DRAWER);
+      showOptions(OPTIONS_DRAWER, ListItem.TYPE_CHECKBOX_OPTION);
     } else {
       toggleSettingByViewId(id);
       adapter.updateValuedSettingById(id);
@@ -102,7 +102,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     if (s != null) ExtendedConfig.instance().toggleSetting(s);
   }
 
-  private void showOptions(int optionType) {
+  private void showOptions(int optionType, int itemType) {
     final Map<Integer, Setting> settingsMap;
     final int title;
     final int wrapId;
@@ -131,13 +131,16 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       title = R.string.DrawerItems;
       wrapId = R.id.btn_drawerItems;
       shouldRestart = true;
-
-    } else {
-      return;
     }
 
     ListItem[] items = settingsMap.entrySet().stream()
-      .map(e -> new ListItem(ListItem.TYPE_CHECKBOX_OPTION, e.getKey(), 0, getLabel(e.getValue()), e.getValue().value))
+      .map(entry -> new ListItem(
+        itemType,
+        entry.getKey(),
+        0,
+        getLabel(entry.getValue()),
+        entry.getValue().value
+      ))
       .toArray(ListItem[]::new);
 
     showSettings(new SettingsWrapBuilder(wrapId)
