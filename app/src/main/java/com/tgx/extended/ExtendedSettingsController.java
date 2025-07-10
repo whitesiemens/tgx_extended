@@ -144,6 +144,9 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       shouldRestart = false;
       title = R.string.ChangePhotoSize;
       wrapId = R.id.btn_photoSize;
+
+    } else {
+      return;
     }
 
     ListItem[] items = settingsMap.entrySet().stream()
