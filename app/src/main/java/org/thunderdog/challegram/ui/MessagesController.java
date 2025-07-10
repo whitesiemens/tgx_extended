@@ -10261,7 +10261,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
   }
 
   public void setTyping (boolean isTyping) {
-    if (!ExtendedConfig.instance().get(Setting.DISABLE_TYPING) && chat != null) {
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_TYPING) && chat != null) {
       setChatAction(TdApi.ChatActionTyping.CONSTRUCTOR, isTyping, false);
     }
   }
@@ -10276,7 +10276,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
       @TdApi.ChatAction.Constructors int action;
       switch (emojiType) {
         case EmojiMediaType.STICKER:
-          if (!ExtendedConfig.instance().get(Setting.DISABLE_TYPING)) {
+          if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_TYPING)) {
             action = TdApi.ChatActionChoosingSticker.CONSTRUCTOR;
           } else {
             action = 0;

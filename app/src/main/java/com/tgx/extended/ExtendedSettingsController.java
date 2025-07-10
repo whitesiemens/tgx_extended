@@ -72,13 +72,13 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       c.setArguments(new Args(mode));
       navigateTo(c);
     } else if (id == R.id.btn_extendedChannel) {
-      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.CHANNEL), new TdlibUi.UrlOpenParameters());
+      tdlib.ui().openUrl(this, ExtendedConfig.CHANNEL, new TdlibUi.UrlOpenParameters());
     } else if (id == R.id.btn_extendedChat) {
-      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.CHAT), new TdlibUi.UrlOpenParameters());
+      tdlib.ui().openUrl(this, ExtendedConfig.CHAT, new TdlibUi.UrlOpenParameters());
     } else if (id == R.id.btn_extendedSources) {
-      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.SOURCES), new TdlibUi.UrlOpenParameters());
+      tdlib.ui().openUrl(this, ExtendedConfig.SOURCES, new TdlibUi.UrlOpenParameters());
     } else if (id == R.id.btn_extendedTranslate) {
-      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.TRANSLATE), new TdlibUi.UrlOpenParameters());
+      tdlib.ui().openUrl(this, ExtendedConfig.TRANSLATE, new TdlibUi.UrlOpenParameters());
     } else if (id == R.id.btn_hideMessageButtons) {
       showOptions(OPTIONS_MESSAGE_PANEL, ListItem.TYPE_CHECKBOX_OPTION);
     } else if (id == R.id.btn_drawerItems) {
