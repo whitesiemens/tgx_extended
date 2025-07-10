@@ -10273,13 +10273,11 @@ public class MessagesController extends ViewController<MessagesController.Argume
 
   public void notifyChoosingEmoji (int emojiType, boolean isChoosingEmoji) {
     if (chat != null) {
-      @TdApi.ChatAction.Constructors int action;
+      TdApi.ChatAction action = null;
       switch (emojiType) {
         case EmojiMediaType.STICKER:
           if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_TYPING)) {
-            action = TdApi.ChatActionChoosingSticker.CONSTRUCTOR;
-          } else {
-            action = 0;
+            action = new TdApi.ChatActionChoosingSticker();
           }
           if (suggestionYDiff > Screen.dp(50) || stickerPreviewIsVisible) {
             hideEmojiSuggestionsTemporarily();
@@ -10298,7 +10296,9 @@ public class MessagesController extends ViewController<MessagesController.Argume
         default:
           return;
       }
-      setChatAction(action, isChoosingEmoji, false);
+      if (action != null) {
+        setChatAction(action, isChoosingEmoji, false);
+      }
     }
   }
 
