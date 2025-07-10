@@ -291,11 +291,11 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
 
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.AboutExtended));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_extendedChannel, R.drawable.baseline_newspaper_24, R.string.ExtendedChannel));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_extendedChannel, R.drawable.baseline_newspaper_24, R.string.ExtendedChannel));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_extendedChat, R.drawable.baseline_forum_24, R.string.ExtendedChat));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_extendedChat, R.drawable.baseline_forum_24, R.string.ExtendedChat));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_extendedSources, R.drawable.baseline_github_24, R.string.ExtendedSources));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_extendedSources, R.drawable.baseline_github_24, R.string.ExtendedSources));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
       items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_extendedTranslate, R.drawable.baseline_translate_24, R.string.ExtendedTranslate));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
