@@ -18,7 +18,7 @@
 
 	<string name="AboutExtended">About</string>
 	<string name="TelegramChannel">Official channel</string>
-	<string name="GitHub">View source code</string>
+	<string name="ViewSources">View source code</string>
 	<string name="Crowdin">Translate</string>
 	<string name="CrowdinDesc">Help to translate TGX Extended to your language.</string>
 	<string name="Donate">Donate</string>

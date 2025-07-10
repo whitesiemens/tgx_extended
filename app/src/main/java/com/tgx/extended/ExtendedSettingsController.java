@@ -290,7 +290,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
       items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_channelLink, R.drawable.baseline_newspaper_24, R.string.TelegramChannel));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, R.drawable.baseline_github_24, R.string.GitHub));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, R.drawable.baseline_github_24, R.string.ViewSources));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
       items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, R.drawable.baseline_translate_24, R.string.Crowdin));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
