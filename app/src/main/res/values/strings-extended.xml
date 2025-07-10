@@ -45,6 +45,10 @@
 	<string name="DisableCommandButton">Command (bots)</string>
 	<string name="DisableSenderButton">Send as</string>
 
+	<string name="ActivityPreferences">Activity</string>
+	<string name="DisableTyping">Disable chat typing</string>
+	<string name="DisableTypingDesc">Will also disable other statuses, such as choosing a sticker.</string>
+
 	<string name="DrawerBlur">Blur profile picture</string>
 	<string name="DrawerDarken">Darken profile picture</string>
 	<string name="DrawerItems">Hide drawer items</string>

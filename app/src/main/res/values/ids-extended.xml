@@ -30,6 +30,8 @@
     <item type="id" name="btn_disableCommandButton" />
     <item type="id" name="btn_disableSenderButton" />
 
+    <item type="id" name="btn_disableTyping" />
+
     <item type="id" name="btn_drawerBlur" />
     <item type="id" name="btn_drawerDarken" />
     <item type="id" name="btn_drawerItems" />
