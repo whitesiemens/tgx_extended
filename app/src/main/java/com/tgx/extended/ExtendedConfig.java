@@ -44,6 +44,7 @@ public class ExtendedConfig {
     DISABLE_COMMAND_BUTTON("disable_command_button", false, true),
     DISABLE_SENDER_BUTTON("disable_sender_button", false, true),
     DISABLE_TYPING("disable_typing", false, false),
+    FOREVER_OFFLINE("forever_offline", false, false),
     Q800PX("photo_size_800", false, false),
     Q1280PX("photo_size_1280", true, false),
     Q2560PX("photo_size_2560", false, false);

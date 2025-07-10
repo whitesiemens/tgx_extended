@@ -140,6 +140,8 @@ import tgx.td.client.RtcServer;
 import tgx.td.client.TdlibOptions;
 import tgx.td.data.MessageWithProperties;
 
+import com.tgx.extended.ExtendedConfig;
+
 public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, DateChangeListener {
   @Override
   public final int accountId () {
@@ -278,7 +280,7 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
       this.client = Client.create(this, this, this);
       tdlib.updateParameters(client);
       if (Config.NEED_ONLINE) {
-        if (tdlib.isOnline) {
+        if (tdlib.isOnline && !ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_OFFLINE)) {
           client.send(new TdApi.SetOption("online", new TdApi.OptionValueBoolean(true)), tdlib.okHandler());
         }
       }
@@ -6473,7 +6475,7 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
     if (this.isOnline != isOnline) {
       this.isOnline = isOnline;
       Log.i("SetOnline accountId:%d -> %b", accountId, isOnline);
-      if (Config.NEED_ONLINE) {
+      if (Config.NEED_ONLINE && !ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_OFFLINE)) {
         performOptional(client -> client.send(new TdApi.SetOption("online", new TdApi.OptionValueBoolean(isOnline)), okHandler()), null);
       }
       // cache().setPauseStatusRefreshers(!isOnline);

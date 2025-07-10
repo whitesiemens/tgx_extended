@@ -24,7 +24,7 @@ import com.tgx.extended.ExtendedConfig.Setting;
 
 import static com.tgx.extended.ExtendedConfig.Setting.*;
 
-public class ExtendedSettingsController extends RecyclerViewController<ExtendedSettingsController.Args> implements View.OnClickListener {
+public class ExtendedSettingsController extends RecyclerViewController<ExtendedSettingsController.Args> implements View.OnClickListener, ExtendedConfig.SettingsChangeListener {
 
   private SettingsAdapter adapter;
   private int mode;
@@ -59,6 +59,13 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     else if (mode == MODE_CHATS) return Lang.getString(R.string.ChatsSettings);
     else if (mode == MODE_MISC) return Lang.getString(R.string.MiscSettings);
     return Lang.getString(R.string.ExtendedSettings);
+  }
+
+  @Override
+  public void onSettingsChanged(ExtendedConfig.Setting setting, boolean newVal, boolean oldVal) {
+    if (setting == ExtendedConfig.Setting.FOREVER_OFFLINE) {
+      Tdlib.getInstance().setOnline(false);
+    }
   }
 
   @Override
@@ -102,7 +109,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     R.id.btn_showUserId, SHOW_USER_ID,
     R.id.btn_hidePhoneNumber, HIDE_PHONE_NUMBER,
     R.id.btn_disableReactions, DISABLE_REACTIONS,
-    R.id.btn_disableTyping, DISABLE_TYPING
+    R.id.btn_disableTyping, DISABLE_TYPING,
+    R.id.btn_foreverOffline, FOREVER_OFFLINE
   );
 
   private void toggleSettingByViewId(int id) {
@@ -238,13 +246,13 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         else if (id == R.id.btn_1280px) setToggle(view, Q1280PX, isUpdate);
         else if (id == R.id.btn_2560px) setToggle(view, Q2560PX, isUpdate);
         else if (id == R.id.btn_disableReactions) setToggle(view, DISABLE_REACTIONS, isUpdate);
-        else if (id == R.id.btn_disableTyping) {
-          view.setData(R.string.DisableTypingDesc);
-          setToggle(view, DISABLE_TYPING, isUpdate);
-        } else if (id == R.id.btn_restrictSensitiveContent) {
+        else if (id == R.id.btn_disableTyping) setToggle(view, DISABLE_TYPING, isUpdate);
+        else if (id == R.id.btn_foreverOffline) setToggle(view, FOREVER_OFFLINE, isUpdate);
+        else if (id == R.id.btn_restrictSensitiveContent) {
           view.getToggler().setRadioEnabled(tdlib.ignoreSensitiveContentRestrictions(), isUpdate);
         } else if (id == R.id.btn_ignoreContentRestrictions) {
           view.getToggler().setRadioEnabled(!Settings.instance().needRestrictContent(), isUpdate);
+        }
       }
     };
 
@@ -277,8 +285,13 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
 
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.ActivityPreferences));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT_WITH_TOGGLER, R.id.btn_disableTyping, 0, R.string.DisableTyping));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_disableTyping, 0, R.string.DisableTyping));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+      items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.DisableTypingDesc));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_foreverOffline, 0, R.string.ForeverOffline));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+      items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.ForeverOffline));
     } else if (mode == MODE_MISC) {
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.UnstablePreferences));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
