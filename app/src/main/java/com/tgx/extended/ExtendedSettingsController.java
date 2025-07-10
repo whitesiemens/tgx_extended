@@ -12,6 +12,7 @@ import org.thunderdog.challegram.telegram.TdlibUi;
 import org.thunderdog.challegram.ui.ListItem;
 import org.thunderdog.challegram.ui.RecyclerViewController;
 import org.thunderdog.challegram.ui.SettingsAdapter;
+import org.thunderdog.challegram.unsorted.Settings;
 import org.thunderdog.challegram.v.CustomRecyclerView;
 
 import java.util.ArrayList;
@@ -85,6 +86,10 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       showOptions(OPTIONS_DRAWER, ListItem.TYPE_CHECKBOX_OPTION);
     } else if (id == R.id.btn_photoSize) {
       showOptions(OPTIONS_PICSIZE, ListItem.TYPE_RADIO_OPTION);
+    } else if (id == R.id.btn_restrictSensitiveContent) {
+      tdlib.setIgnoreSensitiveContentRestrictions(adapter.toggleView(v));
+    } else if (id == R.id.btn_ignoreContentRestrictions) {
+      Settings.instance().setRestrictContent(!adapter.toggleView(v));
     } else {
       toggleSettingByViewId(id);
       adapter.updateValuedSettingById(id);
@@ -236,7 +241,10 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         else if (id == R.id.btn_disableTyping) {
           view.setData(R.string.DisableTypingDesc);
           setToggle(view, DISABLE_TYPING, isUpdate);
-        }
+        } else if (id == R.id.btn_restrictSensitiveContent) {
+          view.getToggler().setRadioEnabled(tdlib.ignoreSensitiveContentRestrictions(), isUpdate);
+        } else if (id == R.id.btn_ignoreContentRestrictions) {
+          view.getToggler().setRadioEnabled(!Settings.instance().needRestrictContent(), isUpdate);
       }
     };
 
@@ -274,9 +282,14 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     } else if (mode == MODE_MISC) {
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.UnstablePreferences));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_restrictSensitiveContent, 0, R.string.DisplaySensitiveContent));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_ignoreContentRestrictions, 0, R.string.IgnoreRestrictions));
+      items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
       items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_photoSize, 0, R.string.ChangePhotoSize));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
       items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.ChangePhotoSizeDesc));
+
     } else {
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.Settings));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));

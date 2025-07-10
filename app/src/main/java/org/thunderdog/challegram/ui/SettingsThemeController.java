@@ -250,10 +250,6 @@ public class SettingsThemeController extends RecyclerViewController<SettingsThem
           }
         } else if (itemId == R.id.btn_separateMedia) {
           v.getToggler().setRadioEnabled(Settings.instance().needSeparateMediaTab(), isUpdate);
-        } else if (itemId == R.id.btn_restrictSensitiveContent) {
-          v.getToggler().setRadioEnabled(tdlib.ignoreSensitiveContentRestrictions(), isUpdate);
-        } else if (itemId == R.id.btn_ignoreContentRestrictions) {
-          v.getToggler().setRadioEnabled(!Settings.instance().needRestrictContent(), isUpdate);
         } else if (itemId == R.id.btn_markdown) {
           v.getToggler().setRadioEnabled(Settings.instance().getNewSetting(Settings.SETTING_FLAG_EDIT_MARKDOWN), isUpdate);
         } else if (itemId == R.id.btn_forceExoPlayerExtensions) {
@@ -554,14 +550,6 @@ public class SettingsThemeController extends RecyclerViewController<SettingsThem
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
 
       boolean sideLoaded = AppInstallationUtil.isAppSideLoaded(UI.getAppContext());
-      if (tdlib.canIgnoreSensitiveContentRestriction() && (sideLoaded || tdlib.ignoreSensitiveContentRestrictions())) {
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
-        items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_restrictSensitiveContent, 0, R.string.DisplaySensitiveContent));
-      }
-      if (sideLoaded || !Settings.instance().needRestrictContent()) {
-        items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
-        items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_ignoreContentRestrictions, 0, R.string.IgnoreRestrictions));
-      }
       if (Settings.instance().getNewSetting(Settings.SETTING_FLAG_EXPLICIT_DICE)) {
         items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
         items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_toggleNewSetting, 0, R.string.UseExplicitDice).setLongId(Settings.SETTING_FLAG_EXPLICIT_DICE));
@@ -1179,10 +1167,6 @@ public class SettingsThemeController extends RecyclerViewController<SettingsThem
       }).setAllowResize(false)); //.setHeaderItem(new SettingItem(SettingItem.TYPE_INFO, 0, 0, UI.getString(R.string.MarkdownHint), false))
     } else if (viewId == R.id.btn_separateMedia) {
       Settings.instance().setNeedSeparateMediaTab(adapter.toggleView(v));
-    } else if (viewId == R.id.btn_restrictSensitiveContent) {
-      tdlib.setIgnoreSensitiveContentRestrictions(adapter.toggleView(v));
-    } else if (viewId == R.id.btn_ignoreContentRestrictions) {
-      Settings.instance().setRestrictContent(!adapter.toggleView(v));
     } else if (viewId == R.id.btn_secret_batmanTransitions) {
       Settings.instance().setNewSetting(Settings.SETTING_FLAG_BATMAN_POLL_TRANSITIONS, adapter.toggleView(v));
     } else if (viewId == R.id.btn_chatListStyle) {
