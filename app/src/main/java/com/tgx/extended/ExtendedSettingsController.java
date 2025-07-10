@@ -54,9 +54,9 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
   @Override
   public CharSequence getName() {
     if (mode == MODE_GENERAL) return Lang.getString(R.string.GeneralSettings);
-    if (mode == MODE_INTERFACE) return Lang.getString(R.string.AppearanceSettings);
-    if (mode == MODE_CHATS) return Lang.getString(R.string.ChatsSettings);
-    if (mode == MODE_MISC) return Lang.getString(R.string.MiscSettings);
+    else if (mode == MODE_INTERFACE) return Lang.getString(R.string.AppearanceSettings);
+    else if (mode == MODE_CHATS) return Lang.getString(R.string.ChatsSettings);
+    else if (mode == MODE_MISC) return Lang.getString(R.string.MiscSettings);
     return Lang.getString(R.string.ExtendedSettings);
   }
 
@@ -71,14 +71,14 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       ExtendedSettingsController c = new ExtendedSettingsController(context(), tdlib);
       c.setArguments(new Args(mode));
       navigateTo(c);
-    } else if (id == R.id.btn_channelLink) {
-      tdlib.ui().openUrl(this, Lang.getString(R.string.ExtendedChannelLink), new TdlibUi.UrlOpenParameters());
-    } else if (id == R.id.btn_githubLink) {
-      tdlib.ui().openUrl(this, Lang.getString(R.string.GithubLink), new TdlibUi.UrlOpenParameters());
-    } else if (id == R.id.btn_crowdinLink) {
-      tdlib.ui().openUrl(this, Lang.getString(R.string.CrowdinLink), new TdlibUi.UrlOpenParameters());
-    } else if (id == R.id.btn_donateLink) {
-      tdlib.ui().openUrl(this, Lang.getString(R.string.DonateLink), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_extendedChannel) {
+      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.CHANNEL), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_extendedChat) {
+      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.CHAT), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_extendedSources) {
+      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.SOURCES), new TdlibUi.UrlOpenParameters());
+    } else if (id == R.id.btn_extendedTranslate) {
+      tdlib.ui().openUrl(this, Lang.getString(ExtendedConfig.TRANSLATE), new TdlibUi.UrlOpenParameters());
     } else if (id == R.id.btn_hideMessageButtons) {
       showOptions(OPTIONS_MESSAGE_PANEL, ListItem.TYPE_CHECKBOX_OPTION);
     } else if (id == R.id.btn_drawerItems) {
@@ -199,10 +199,10 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       @Override
       protected void setValuedSetting(ListItem item, SettingView view, boolean isUpdate) {
         int id = item.getId();
-        if (id == R.id.btn_channelLink) view.setData(R.string.ExtendedUsername);
-        else if (id == R.id.btn_githubLink) view.setData(R.string.GitHub);
-        else if (id == R.id.btn_crowdinLink) view.setData(R.string.CrowdinDesc);
-        else if (id == R.id.btn_donateLink) view.setData(R.string.DonateDesc);
+        if (id == R.id.btn_extendedChannel) view.setData(R.string.ExtendedChannelDesc);
+        else if (id == R.id.btn_extendedChat) view.setData(R.string.ExtendedChatDesc);
+        else if (id == R.id.btn_extendedSources) view.setData(R.string.ExtendedSourcesDesc);
+        else if (id == R.id.btn_extendedTranslate) view.setData(R.string.ExtendedTranslateDesc);
         else if (id == R.id.btn_showUserId) setToggle(view, SHOW_USER_ID, isUpdate);
         else if (id == R.id.btn_drawerBlur) setToggle(view, DRAWER_BLUR, isUpdate);
         else if (id == R.id.btn_drawerDarken) setToggle(view, DRAWER_DARKEN, isUpdate);
@@ -288,15 +288,13 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
 
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.AboutExtended));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_channelLink, R.drawable.baseline_newspaper_24, R.string.TelegramChannel));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_extendedChannel, R.drawable.baseline_newspaper_24, R.string.ExtendedChannel));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_githubLink, R.drawable.baseline_github_24, R.string.ViewSources));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_extendedChat, R.drawable.baseline_forum_24, R.string.ExtendedChat));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_crowdinLink, R.drawable.baseline_translate_24, R.string.Crowdin));
+      items.add(new ListItem(ListItem.TYPE_SETTING, R.id.btn_extendedSources, R.drawable.baseline_github_24, R.string.ExtendedSources));
       items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_donateLink, R.drawable.baseline_paid_24, R.string.Donate));
-      items.add(new ListItem(ListItem.TYPE_SEPARATOR));
-      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_checkExtendedUpdates, R.drawable.baseline_update_24, R.string.OTACheck));
+      items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_extendedTranslate, R.drawable.baseline_translate_24, R.string.ExtendedTranslate));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
       items.add(new ListItem(ListItem.TYPE_BUILD_NO, R.id.btn_build, 0, ExtendedConfig.BUILD));
     }

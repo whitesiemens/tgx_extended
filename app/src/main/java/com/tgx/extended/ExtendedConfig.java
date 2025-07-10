@@ -22,6 +22,10 @@ public class ExtendedConfig {
   public static final String BUILD_VERSION = "1.0";
   public static final String BUILD_CODENAME = "Andromeda";
   public static final String BUILD = BUILD_VERSION + " " + BUILD_CODENAME;
+  public static final String CHANNEL = "t.me/tgx_extended";
+  public static final String CHAT = "t.me/tgx_extended_chat";
+  public static final String SOURCES = "github.com/whitesiemens/tgx_extended";
+  public static final String TRANSLATE = "";
 
   public enum Setting {
     SHOW_USER_ID("show_user_id", false, false),

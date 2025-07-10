@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="controller_extendedSettings"/>
-    <item type="id" name="controller_generalSettings"/>
-    <item type="id" name="controller_appearanceSettings"/>
-    <item type="id" name="controller_chatsSettings"/>
-    <item type="id" name="controller_miscSettings"/>
 
-    <item type="id" name="btn_extendedSettings"/>
-    <item type="id" name="btn_generalSettings"/>
-    <item type="id" name="btn_appearanceSettings"/>
-    <item type="id" name="btn_chatsSettings"/>
-    <item type="id" name="btn_miscSettings"/>
-    <item type="id" name="btn_channelLink"/>
-    <item type="id" name="btn_githubLink"/>
-    <item type="id" name="btn_crowdinLink"/>
-    <item type="id" name="btn_donateLink"/>
-    <item type="id" name="btn_checkExtendedUpdates"/>
+    <!-- Define controller -->
+    <item type="id" name="controller_extendedSettings" />
 
-    <item type="id" name="btn_showUserId" />
+    <!-- Main menu -->
+    <item type="id" name="btn_extendedSettings" />
+    <item type="id" name="btn_generalSettings" />
+    <item type="id" name="btn_appearanceSettings" />
+    <item type="id" name="btn_chatsSettings" />
+    <item type="id" name="btn_miscSettings" />
+
+    <item type="id" name="btn_extendedChannel" />
+    <item type="id" name="btn_extendedChat" />
+    <item type="id" name="btn_extendedSources" />
+    <item type="id" name="btn_extendedTranslate" />
+
+    <!-- General settings -->
     <item type="id" name="btn_userId" />
+    <item type="id" name="btn_showUserId" />
 
+    <!-- Appearance settings -->
     <item type="id" name="btn_hidePhoneNumber" />
+    <item type="id" name="btn_drawerBlur" />
+    <item type="id" name="btn_drawerDarken" />
+    <item type="id" name="btn_drawerItems" />
 
+    <!-- Chats settings -->
     <item type="id" name="btn_disableReactions" />
+    <item type="id" name="btn_disableTyping" />
 
     <item type="id" name="btn_hideMessageButtons" />
     <item type="id" name="btn_disableCameraButton" />
@@ -30,14 +36,10 @@
     <item type="id" name="btn_disableCommandButton" />
     <item type="id" name="btn_disableSenderButton" />
 
-    <item type="id" name="btn_disableTyping" />
-
-    <item type="id" name="btn_drawerBlur" />
-    <item type="id" name="btn_drawerDarken" />
-    <item type="id" name="btn_drawerItems" />
-
+    <!-- Misc settings -->
     <item type="id" name="btn_photoSize" />
     <item type="id" name="btn_800px" />
     <item type="id" name="btn_1280px" />
     <item type="id" name="btn_2560px" />
+
 </resources>
