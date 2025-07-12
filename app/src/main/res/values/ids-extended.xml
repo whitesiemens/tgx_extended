@@ -30,6 +30,7 @@
     <item type="id" name="btn_disableReactions" />
     <item type="id" name="btn_disableTyping" />
     <item type="id" name="btn_foreverOffline" />
+    <item type="id" name="btn_foreverUnread" />
 
     <item type="id" name="btn_hideMessageButtons" />
     <item type="id" name="btn_disableCameraButton" />

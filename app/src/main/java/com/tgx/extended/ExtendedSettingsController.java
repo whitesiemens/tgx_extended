@@ -110,7 +110,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
     R.id.btn_hidePhoneNumber, HIDE_PHONE_NUMBER,
     R.id.btn_disableReactions, DISABLE_REACTIONS,
     R.id.btn_disableTyping, DISABLE_TYPING,
-    R.id.btn_foreverOffline, FOREVER_OFFLINE
+    R.id.btn_foreverOffline, FOREVER_OFFLINE,
+    R.id.btn_foreverUnread, FOREVER_UNREAD
   );
 
   private void toggleSettingByViewId(int id) {
@@ -248,6 +249,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
         else if (id == R.id.btn_disableReactions) setToggle(view, DISABLE_REACTIONS, isUpdate);
         else if (id == R.id.btn_disableTyping) setToggle(view, DISABLE_TYPING, isUpdate);
         else if (id == R.id.btn_foreverOffline) setToggle(view, FOREVER_OFFLINE, isUpdate);
+        else if (id == R.id.btn_foreverUnread) setToggle(view, FOREVER_UNREAD, isUpdate);
         else if (id == R.id.btn_restrictSensitiveContent) {
           view.getToggler().setRadioEnabled(tdlib.ignoreSensitiveContentRestrictions(), isUpdate);
         } else if (id == R.id.btn_ignoreContentRestrictions) {
@@ -285,13 +287,18 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
 
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.ActivityPreferences));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_foreverOffline, 0, R.string.ForeverOffline));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+      items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.ForeverOfflineDesc));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_foreverUnread, 0, R.string.ForeverUnread));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+      items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.ForeverUnreadDesc));
+      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
       items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_disableTyping, 0, R.string.DisableTyping));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
       items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.DisableTypingDesc));
-      items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-      items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_foreverOffline, 0, R.string.ForeverOffline));
-      items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-      items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.ForeverOffline));
+      
     } else if (mode == MODE_MISC) {
       items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.UnstablePreferences));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));

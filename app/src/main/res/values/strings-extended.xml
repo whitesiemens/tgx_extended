@@ -44,6 +44,8 @@
 	<string name="DisableTypingDesc">This setting hides message sending statuses. The person will not see that you are typing, selecting a sticker, or sending a document. However, the setting is still being finalized and does not hide all statuses completely.</string>
 	<string name="ForeverOffline">Send offline status</string>
 	<string name="ForeverOfflineDesc">If you enable this setting, TGX Extended will constantly try to send an offline status to hide your presence. However, remember that some actions are controlled directly through the Telegram server and the online status will be sent in such cases.</string>
+	<string name="ForeverUnread">Do not read messages</string>
+	<string name="ForeverUnreadDesc">If you enable this setting, TGX Extended will not send the read status of a message to another user.</string>
 
 	<string name="DrawerBlur">Blur profile picture</string>
 	<string name="DrawerDarken">Darken profile picture</string>

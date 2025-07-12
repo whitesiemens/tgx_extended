@@ -3883,7 +3883,7 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
             break;
         }
       }
-      if (!hasPasscode(chat) && chat.lastMessage != null) {
+      if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_UNREAD) && !hasPasscode(chat) && chat.lastMessage != null) {
         client().send(new TdApi.ViewMessages(chatId, new long[] {chat.lastMessage.id}, source, true), okHandler(after));
       }
     }
@@ -5637,7 +5637,9 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
     if (Log.isEnabled(Log.TAG_FCM)) {
       Log.i(Log.TAG_FCM, "Reading messages chatId:%d messageIds:%s", Log.generateSingleLineException(2), chatId, Arrays.toString(messageIds));
     }
-    client().send(new TdApi.ViewMessages(chatId, messageIds, source, true), okHandler());
+    if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_UNREAD)) {
+      client().send(new TdApi.ViewMessages(chatId, messageIds, source, true), okHandler());
+    }
   }
 
   // TDLib config
