@@ -11,9 +11,9 @@
 
 	<string name="AboutExtended">About</string>
 	<string name="ExtendedChannel">Official channel</string>
-	<string name="ExtendedChannelDesc">Subscribe and stay up to date with the latest news and updates</string>
+	<string name="ExtendedChannelDesc">Subscribe and stay up to date with the latest updates</string>
 	<string name="ExtendedChat">Official chat</string>
-	<string name="ExtendedChatDesc">Join and discuss Extended with other users, suggest new features and report bugs</string>
+	<string name="ExtendedChatDesc">Join and discuss Extended with other users</string>
 	<string name="ExtendedSources">View source code</string>
 	<string name="ExtendedSourcesDesc">TGX Extended is an open source project. Enjoy this!</string>
 	<string name="ExtendedTranslate">Translate</string>
