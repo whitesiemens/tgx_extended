@@ -68,7 +68,7 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
   @Override
   public void onSettingsChanged(ExtendedConfig.Setting setting, boolean newVal, boolean oldVal) {
     if (setting == ExtendedConfig.Setting.FOREVER_OFFLINE) {
-      Tdlib.getInstance().setOnline(false);
+      tdlib.setOnline(false);
     }
   }
 
