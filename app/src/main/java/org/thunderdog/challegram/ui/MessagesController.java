@@ -10279,7 +10279,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
           if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.DISABLE_TYPING)) {
             action = TdApi.ChatActionChoosingSticker.CONSTRUCTOR;
           } else {
-            action = 0;
+            action = TdApi.ChatActionCancel.CONSTRUCTOR;
           }
           if (suggestionYDiff > Screen.dp(50) || stickerPreviewIsVisible) {
             hideEmojiSuggestionsTemporarily();
