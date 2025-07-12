@@ -54,11 +54,15 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
 
   @Override
   public CharSequence getName() {
-    if (mode == MODE_GENERAL) return Lang.getString(R.string.GeneralSettings);
-    else if (mode == MODE_INTERFACE) return Lang.getString(R.string.AppearanceSettings);
-    else if (mode == MODE_CHATS) return Lang.getString(R.string.ChatsSettings);
-    else if (mode == MODE_MISC) return Lang.getString(R.string.MiscSettings);
-    return Lang.getString(R.string.ExtendedSettings);
+    return mode == MODE_GENERAL
+      ? Lang.getString(R.string.GeneralSettings)
+      : mode == MODE_INTERFACE
+      ? Lang.getString(R.string.AppearanceSettings)
+      : mode == MODE_CHATS
+      ? Lang.getString(R.string.ChatsSettings)
+      : mode == MODE_MISC
+      ? Lang.getString(R.string.MiscSettings) 
+      : Lang.getString(R.string.ExtendedSettings);
   }
 
   @Override
