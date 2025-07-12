@@ -3883,8 +3883,12 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
             break;
         }
       }
-      if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_UNREAD) && !hasPasscode(chat) && chat.lastMessage != null) {
-        client().send(new TdApi.ViewMessages(chatId, new long[] {chat.lastMessage.id}, source, true), okHandler(after));
+      if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_UNREAD)) {
+        if (!hasPasscode(chat) && chat.lastMessage != null) {
+          client().send(new TdApi.ViewMessages(chatId, new long[] {chat.lastMessage.id}, source, true), okHandler(after));
+        }
+      } else {
+        return;
       }
     }
   }
@@ -4555,10 +4559,14 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
         if (Log.isEnabled(Log.TAG_MESSAGES_LOADER)) {
           Log.v(Log.TAG_MESSAGES_LOADER, "openChat, chatId=%d", chatId);
         }
-        client().send(new TdApi.OpenChat(chatId), after != null ? result -> {
-          okHandler.onResult(result);
-          after.run();
-        } : okHandler);
+        if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_UNREAD)) {
+          client().send(new TdApi.OpenChat(chatId), after != null ? result -> {
+            okHandler.onResult(result);
+            after.run();
+          } : okHandler);
+        } else {
+          if (after != null) after.run();
+        }
       } else if (after != null) {
         client().send(new TdApi.SetAlarm(0), result ->
           after.run()
@@ -5639,6 +5647,8 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
     }
     if (!ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_UNREAD)) {
       client().send(new TdApi.ViewMessages(chatId, messageIds, source, true), okHandler());
+    } else {
+      return;
     }
   }
 
