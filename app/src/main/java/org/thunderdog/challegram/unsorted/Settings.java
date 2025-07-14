@@ -123,6 +123,8 @@ import tgx.td.ChatId;
 import tgx.td.MessageId;
 import tgx.td.Td;
 
+import com.tgx.extended.ExtendedConfig;
+
 /**
  * All app-related settings.
  * <p>
@@ -3043,13 +3045,14 @@ public class Settings {
   }
 
   public boolean dontReadMessages () {
-    return BuildConfig.DEBUG && checkSetting(FLAG_OTHER_DONT_READ_MESSAGES);
+    return checkSetting(FLAG_OTHER_DONT_READ_MESSAGES);
   }
 
-  public void setDontReadMessages (boolean dontReadMessages) {
-    if (dontReadMessages) {
-      if (!BuildConfig.DEBUG || !Log.isEnabled(Log.TAG_MESSAGES_LOADER))
-        dontReadMessages = false;
+  public void setDontReadMessages () {
+    if (ExtendedConfig.instance().get(ExtendedConfig.Setting.FOREVER_UNREAD)) {
+      dontReadMessages = true;
+    } else {
+      dontReadMessages = false;
     }
     setSetting(FLAG_OTHER_DONT_READ_MESSAGES, dontReadMessages);
   }

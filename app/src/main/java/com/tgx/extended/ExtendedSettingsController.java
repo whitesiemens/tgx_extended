@@ -102,6 +102,8 @@ public class ExtendedSettingsController extends RecyclerViewController<ExtendedS
       tdlib.setIgnoreSensitiveContentRestrictions(adapter.toggleView(v));
     } else if (id == R.id.btn_ignoreContentRestrictions) {
       Settings.instance().setRestrictContent(!adapter.toggleView(v));
+    } else if (id == R.id.btn_foreverUnread) {
+      Settings.instance().setDontReadMessages();
     } else {
       toggleSettingByViewId(id);
       adapter.updateValuedSettingById(id);
